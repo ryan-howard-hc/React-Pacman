@@ -6,7 +6,7 @@ const Pac = ({ boardData }) => {
       {boardData.map((row, rowIndex) => (
         <div key={rowIndex} className="flex">
           {row.map((cell, columnIndex) => (
-            <div key={`${rowIndex}-${columnIndex}`} className={`w-10 h-10 border border-gray-300 ${getCellClass(cell)}`}>
+            <div key={`${rowIndex}-${columnIndex}`} className={`w-10 h-6 border border-gray-300 ${getCellClass(cell)}`}>
 </div>
 
           ))}
