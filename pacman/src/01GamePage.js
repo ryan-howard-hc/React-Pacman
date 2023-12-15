@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Pac from './00pac.js';
+import PacMan from './02PacMan.js';
+
 
 const GamePage = () => {
   // boardData is a 2D array representing the game board
@@ -18,7 +20,7 @@ const GamePage = () => {
     ['X', '.', '.', '.', 'X', 'X', '.', 'X', 'X', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'X', 'X', '.', 'X', 'X', '.', '.', '.', 'X'],
     ['X', '.', '.', '.', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X', 'X', '.', 'X', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X', '.', '.', '.', 'X'],
     ['X', 'X', 'X', 'X', 'X', 'X', '.', 'X', 'X', '.', 'X', '.', '.', '.', '.', '.', 'X', '.', 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X', 'X'],
-    ['X', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'X', 'G', 'G', '.', 'G', 'G', 'X', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'X'],
+    ['X', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'X', 'G1', 'G2', '.', 'G3', 'G4', 'X', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'X'],
     ['X', 'X', 'X', 'X', 'X', 'X', '.', 'X', 'X', '.', 'X', '.', '.', '.', '.', '.', 'X', '.', 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X', 'X'],
     ['X', '.', '.', '.', 'X', 'X', '.', 'X', 'X', '.', 'X', '.', '.', '.', '.', '.', 'X', '.', 'X', 'X', '.', 'X', 'X', '.', '.', '.', 'X'],
     ['X', '.', '.', '.', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X', 'X', 'X', '.', 'X', 'X', '.', 'X', 'X', '.', '.', '.', 'X'],
@@ -37,56 +39,21 @@ const GamePage = () => {
     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
 
   ]
-
   const [boardData, setBoardData] = useState(initialBoardData);
-  const [pacmanPosition, setPacmanPosition] = useState({ row: 3, col: 1 }); // position of Pac-Man
-
-  const handleKeyDown = (event) => {
-    const { key } = event;
-    const { row, col } = pacmanPosition;
-
-    // new position based on key press
-    let newRow = row;
-    let newCol = col;
-
-    switch (key) {
-      case 'ArrowUp':
-        newRow = row - 1;
-        break;
-      case 'ArrowDown':
-        newRow = row + 1;
-        break;
-      case 'ArrowLeft':
-        newCol = col - 1;
-        break;
-      case 'ArrowRight':
-        newCol = col + 1;
-        break;
-      default:
-        return;
-    }
-
-    if (boardData[newRow] && boardData[newRow][newCol] !== 'X') {
-      const newBoardData = [...boardData];
-      newBoardData[row][col] = '.'; 
-      newBoardData[newRow][newCol] = 'P'; 
-      setBoardData(newBoardData);
-      setPacmanPosition({ row: newRow, col: newCol });
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [boardData, pacmanPosition]);
+  const [pacmanPosition, setPacmanPosition] = useState({ row: 23, col: 13 });
 
   return (
     <div className="game-container">
       <h1>Pac-Man Game</h1>
       <Pac boardData={boardData} />
+
+      <PacMan
+        initialBoardData={initialBoardData}
+        boardData={boardData}
+        pacmanPosition={pacmanPosition}
+        setPacmanPosition={setPacmanPosition}
+        setBoardData={setBoardData}
+      />
     </div>
   );
 };

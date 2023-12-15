@@ -24,9 +24,15 @@ function getCellClass(cellValue) {
     case 'P':
         //pacman
       return 'bg-yellow-400'; 
-    case 'G':
-        //ghost
-      return 'bg-red-500'; 
+    // ghostgang
+    case 'G1':
+      return 'bg-red-500'; // blinky
+    case 'G2':
+      return 'bg-blue-500'; // inky
+    case 'G3':
+      return 'bg-pink-500'; // pinky
+    case 'G4':
+      return 'bg-orange-500'; // clyde
     case 'C':
         //coins
       return 'bg-blue-300';
