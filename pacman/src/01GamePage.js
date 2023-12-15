@@ -3,7 +3,7 @@ import Pac from './00pac.js';
 
 const GamePage = () => {
   // boardData is a 2D array representing the game board
-  const boardData = [
+  const initialBoardData  = [
     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
     ['X', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'X', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'X'],
     ['X', '.', 'X', 'X', 'X', 'X', '.', 'X', 'X', 'X', 'X', 'X', '.', 'X', '.', 'X', 'X', 'X', 'X', 'X', '.', 'X', 'X', 'X', 'X', '.', 'X'],
@@ -37,6 +37,51 @@ const GamePage = () => {
     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
 
   ]
+
+  const [boardData, setBoardData] = useState(initialBoardData);
+  const [pacmanPosition, setPacmanPosition] = useState({ row: 3, col: 1 }); // position of Pac-Man
+
+  const handleKeyDown = (event) => {
+    const { key } = event;
+    const { row, col } = pacmanPosition;
+
+    // new position based on key press
+    let newRow = row;
+    let newCol = col;
+
+    switch (key) {
+      case 'ArrowUp':
+        newRow = row - 1;
+        break;
+      case 'ArrowDown':
+        newRow = row + 1;
+        break;
+      case 'ArrowLeft':
+        newCol = col - 1;
+        break;
+      case 'ArrowRight':
+        newCol = col + 1;
+        break;
+      default:
+        return;
+    }
+
+    if (boardData[newRow] && boardData[newRow][newCol] !== 'X') {
+      const newBoardData = [...boardData];
+      newBoardData[row][col] = '.'; 
+      newBoardData[newRow][newCol] = 'P'; 
+      setBoardData(newBoardData);
+      setPacmanPosition({ row: newRow, col: newCol });
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [boardData, pacmanPosition]);
 
   return (
     <div className="game-container">
