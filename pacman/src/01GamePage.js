@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Pac from './00pac.js';
 import PacMan from './02PacMan.js';
-
+import Blinky from './03Blinky.js';
 
 const GamePage = () => {
   // boardData is a 2D array representing the game board
@@ -54,6 +54,8 @@ const GamePage = () => {
         setPacmanPosition={setPacmanPosition}
         setBoardData={setBoardData}
       />
+      {/* <Blinky initialBoardData={initialBoardData} pacmanPosition={pacmanPosition} /> */}
+
     </div>
   );
 };
