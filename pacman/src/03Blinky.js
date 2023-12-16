@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-
-//hook allows functional components to manage state
-//taking in two props to account for and play off of
+//gotta make sure to call pacmanPosition 
 const Blinky = ({ initialBoardData, pacmanPosition }) => {
     const [boardData, setBoardData] = useState(initialBoardData);
   const [blinkyPosition, setBlinkyPosition] = useState({ row:14, col: 11 });
+
+
+
+  const [moveAwayTimer, setMoveAwayTimer] = useState(0);
 
 
   //"Breadth-First Search algorithm" genius. Finds shortest point between two points
@@ -46,6 +48,30 @@ const Blinky = ({ initialBoardData, pacmanPosition }) => {
 
 //calculates the shortest path using the bfsShortestPath function. clears blinkys previous position and sets its new position
   const moveBlinkyTowardsPacman = () => {
+
+    if (moveAwayTimer > 0) {
+      // Decrease the timer and continue moving Blinky away
+      setMoveAwayTimer(prevTimer => prevTimer - 1);
+
+      // Code to move Blinky away from Pacman using the 'oppositePath'
+      const oppositePathNode = blinkysShortestPath(blinkyPosition, pacmanPosition);
+      if (oppositePathNode) {
+        const oppositePath = [];
+        let currentBlinky = oppositePathNode;
+
+        while (currentBlinky !== null) {
+          oppositePath.push(currentBlinky);
+          currentBlinky = currentBlinky.prev;
+        }
+        oppositePath.pop();
+
+        if (oppositePath.length > 0) {
+          const nextPosition = oppositePath.pop();
+          setBoardAndPosition(nextPosition.row, nextPosition.col);
+        }
+      }
+    } else {
+
     const shortestPathNode = blinkysShortestPath(blinkyPosition, pacmanPosition);
     //Calls the blinkysShortestPath function with nlinkys current position and pacman position (called in 'Blinky') to find the shortest path.
 
@@ -72,6 +98,7 @@ const Blinky = ({ initialBoardData, pacmanPosition }) => {
         setBoardAndPosition(nextPosition.row, nextPosition.col);    //sets the board and blinkys position to the next position retrieved from the path
       }
     }
+  }
   };
 
   const setBoardAndPosition = (row, col) => {
@@ -83,10 +110,32 @@ const Blinky = ({ initialBoardData, pacmanPosition }) => {
   };
 
 
+
+  const moveBlinkyAway = () => {
+    const duration = 20; //  10 steps for start
+
+    setMoveAwayTimer(duration);
+  };
+
+
+
+
   //listens for changes in pacmanPosition and triggers blinky
   useEffect(() => {
+    console.log('Pacman position or boardData changed');
+
     moveBlinkyTowardsPacman();
-  }, [pacmanPosition]);
+  }, [pacmanPosition, moveAwayTimer]);
+  
+  useEffect(() => {
+    const pacmanTile = boardData[pacmanPosition.row][pacmanPosition.col];
+    if (pacmanTile === 'U') {
+      console.log('Pacman is on a "U" block');
+
+      moveBlinkyAway();
+    }
+  }, [pacmanPosition, boardData]); 
+  
 
   return (
     <div className="blinky-container">

@@ -43,6 +43,10 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData }) 
     };
   }, [boardData, pacmanPosition, setPacmanPosition, setBoardData]);
 
+
+
+  
+
   return null; // placeholder for image if i want to add
 };
 
