@@ -1,75 +1,92 @@
 import React, { useState, useEffect } from 'react';
 
+
+//hook allows functional components to manage state
+//taking in two props to account for and play off of
 const Blinky = ({ initialBoardData, pacmanPosition }) => {
     const [boardData, setBoardData] = useState(initialBoardData);
   const [blinkyPosition, setBlinkyPosition] = useState({ row:14, col: 11 });
 
 
-  const calculateDirection = () => {
-    const { row: blinkyRow, col: blinkyCol } = blinkyPosition;
-    const { row: pacRow, col: pacCol } = pacmanPosition;
-
-    // difference between the positions of blinky and pacman
-    const rowDiff = pacRow - blinkyRow;
-    const colDiff = pacCol - blinkyCol;
-
-    // direction based on the difference in positions (Thanks gpt, Im an idiot)
-    let direction = '';
-    if (Math.abs(rowDiff) > Math.abs(colDiff)) {
-      direction = rowDiff > 0 ? 'down' : 'up';
-    } else {
-      direction = colDiff > 0 ? 'right' : 'left';
+  //"Breadth-First Search algorithm" genius. Finds shortest point between two points
+  const blinkysShortestPath = (start, target) => {
+    const queue = [{ ...start, prev: null }];
+    const visited = new Set();
+    const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]]; //up,down,right,left
+  
+    while (queue.length > 0) {
+      const current = queue.shift();
+      const { row, col } = current;
+  
+      if (row === target.row && col === target.col) {
+        return current;
+      }
+  
+      for (const [dx, dy] of directions) {
+        const newRow = row + dx;
+        const newCol = col + dy;
+  
+        if (
+          newRow >= 0 &&
+          newRow < boardData.length &&
+          newCol >= 0 &&
+          newCol < boardData[0].length &&
+          boardData[newRow][newCol] !== 'X' && //checks valid position. cant go through walls
+          !visited.has(`${newRow},${newCol}`)
+        ) {
+          queue.push({ row: newRow, col: newCol, prev: current });
+          visited.add(`${newRow},${newCol}`);
+        }
+      }
     }
-
-    return direction;
+  
+    return null;
   };
+  
 
+//calculates the shortest path using the bfsShortestPath function. clears blinkys previous position and sets its new position
   const moveBlinkyTowardsPacman = () => {
-    const direction = calculateDirection();
-  
-    const { row: blinkyRow, col: blinkyCol } = blinkyPosition;
-    let newRow = blinkyRow;
-    let newCol = blinkyCol;
-  
-    // Update the new position based on the calculated direction
-    switch (direction) {
-      case 'up':
-        newRow -= 1;
-        break;
-      case 'down':
-        newRow += 1;
-        break;
-      case 'left':
-        newCol -= 1;
-        break;
-      case 'right':
-        newCol += 1;
-        break;
-      default:
-        break;
-    }
-  
-    // check if X
-    if (boardData[newRow] && boardData[newRow][newCol] !== 'X') {
-      const newBoardData = [...boardData];
-      newBoardData[blinkyRow][blinkyCol] = '.'; // clears previous position to calculate for new position
-      newBoardData[newRow][newCol] = 'G1'; // sets new position
-      setBoardData(newBoardData); // updates board
-      setBlinkyPosition({ row: newRow, col: newCol }); //updates blkinkys new spot
+    const shortestPathNode = blinkysShortestPath(blinkyPosition, pacmanPosition);
+    //Calls the blinkysShortestPath function with nlinkys current position and pacman position (called in 'Blinky') to find the shortest path.
+
+
+
+    if (shortestPathNode) {     //checks if a shortest path is found. if shortestPathNode exists/is not null, executes the following code block
+      const path = [];       
+      let currentBlinky = shortestPathNode; //initializes an empty array called path to store the path, sets currentBlinky as the shortestPathNode
+
+
+      // loop to reconstruct the path by iterating from the shortestPathNode to the starting point (blinkys current position). This loop iterates until current becomes null
+      // reconstructs path by tracing back from the target to the start
+      while (currentBlinky !== null) {
+        path.push(currentBlinky);               // pushes each node (position) to the path array
+        currentBlinky = currentBlinky.prev;       // moves to the previous node in the path
+      }
+      path.pop(); // removes last node from the path array. blinkys current position
+
+
+
+      // checks if there are positions in the path to move him/ basically keeps him on track and chasing
+      if (path.length > 0) {
+        const nextPosition = path.pop();          
+        setBoardAndPosition(nextPosition.row, nextPosition.col);    //sets the board and blinkys position to the next position retrieved from the path
+      }
     }
   };
 
-//    handle Blinky's movement each time Pac-Man moves??????????????????
-//   const handlePacmanMove = (pacmanPosition) => {
-//     moveBlinkyTowardsPacman(pacmanPosition);
-//   };
+  const setBoardAndPosition = (row, col) => {
+    const newBoardData = [...boardData];
+    newBoardData[blinkyPosition.row][blinkyPosition.col] = '.'; //clear previous position
+    newBoardData[row][col] = 'G1'; //set new position for blinky
+    setBoardData(newBoardData); //update the board
+    setBlinkyPosition({ row, col }); //update blinky's new position
+  };
 
-//   useEffect(() => {
-//     event listener for pacman movement
-//     when Pac-Man moves, call handlePacmanMove with pacman position
 
-
-//   }, [boardData, blinkyPosition]);
+  //listens for changes in pacmanPosition and triggers blinky
+  useEffect(() => {
+    moveBlinkyTowardsPacman();
+  }, [pacmanPosition]);
 
   return (
     <div className="blinky-container">
