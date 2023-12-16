@@ -129,9 +129,10 @@ const Blinky = ({ initialBoardData, pacmanPosition }) => {
   
   useEffect(() => {
     const pacmanTile = boardData[pacmanPosition.row][pacmanPosition.col];
+    console.log(`Pacman tile value: '${pacmanTile}'`);
+  
     if (pacmanTile === 'U') {
       console.log('Pacman is on a "U" block');
-
       moveBlinkyAway();
     }
   }, [pacmanPosition, boardData]); 
@@ -144,4 +145,4 @@ const Blinky = ({ initialBoardData, pacmanPosition }) => {
   );
 };
 
-export default Blinky;
+export default Blinky; 

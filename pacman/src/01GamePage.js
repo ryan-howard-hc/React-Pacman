@@ -53,8 +53,9 @@ const GamePage = () => {
         pacmanPosition={pacmanPosition}
         setPacmanPosition={setPacmanPosition}
         setBoardData={setBoardData}
+        
       />
-      <Blinky initialBoardData={initialBoardData} pacmanPosition={pacmanPosition} />
+      <Blinky  boardData={boardData} initialBoardData={initialBoardData} pacmanPosition={pacmanPosition} />
 
     </div>
   );
