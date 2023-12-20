@@ -41,12 +41,17 @@ const GamePage = () => {
   ]
   const [boardData, setBoardData] = useState(initialBoardData);
   const [pacmanPosition, setPacmanPosition] = useState({ row: 23, col: 13 });
+  const [keyPressCount, setKeyPressCount] = useState(0);
 
-
+  const handleKeyPress = () => {
+    // Update key press count
+    setKeyPressCount(prevCount => prevCount + 1);
+  };
 
   return (
     <div className="game-container">
       <h1>Pac-Man Game</h1>
+      <p>Key Press Count: {keyPressCount}</p>
       <Pac boardData={boardData} />
 
       <PacMan
@@ -55,12 +60,15 @@ const GamePage = () => {
         pacmanPosition={pacmanPosition}
         setPacmanPosition={setPacmanPosition}
         setBoardData={setBoardData}
-        
+        handleKeyPress={handleKeyPress}
+
       />
       <Blinky
         boardData={boardData}
         initialBoardData={initialBoardData}
         pacmanPosition={pacmanPosition}
+        keyPressCount={keyPressCount}
+
       />
     </div>
   );

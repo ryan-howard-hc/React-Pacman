@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
-const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData }) => {
+const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, handleKeyPress }) => {
+  
   const handleKeyDown = (event) => {
 
     const { key } = event;
@@ -64,7 +65,8 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData }) 
       //   setPacmanPosition({ row: newRow, col: newCol });
       // }
     }
-    
+    handleKeyPress();
+
   };
 
   
@@ -75,7 +77,7 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData }) 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [boardData, pacmanPosition, setPacmanPosition, setBoardData]);
+  }, [boardData, pacmanPosition, setPacmanPosition, setBoardData, handleKeyPress]);
 
 
 
