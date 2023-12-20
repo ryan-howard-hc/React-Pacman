@@ -50,11 +50,11 @@ const GamePage = () => {
     if (pacmanTile === 'U') {
       console.log('Pacman is on a "U" block');
       setPacmanOnU(true);
+      setMoveAwayTimer(20);
     } else {
       setPacmanOnU(false);
     }
   }, [pacmanPosition, boardData]);
-
 
   return (
     <div className="game-container">
@@ -70,9 +70,14 @@ const GamePage = () => {
         setPacmanOnU={setPacmanOnU}
         
       />
-      <Blinky  boardData={boardData} initialBoardData={initialBoardData} pacmanPosition={pacmanPosition}
-      setMoveAwayTimer={setMoveAwayTimer} />
-
+      <Blinky
+        boardData={boardData}
+        initialBoardData={initialBoardData}
+        pacmanPosition={pacmanPosition}
+        setMoveAwayTimer={setMoveAwayTimer}
+        moveAwayTimer={moveAwayTimer}
+        pacmanOnU={pacmanOnU}
+      />
     </div>
   );
 };
