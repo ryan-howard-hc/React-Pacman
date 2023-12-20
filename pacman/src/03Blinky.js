@@ -1,13 +1,48 @@
 import React, { useState, useEffect } from 'react';
 
 //gotta make sure to call pacmanPosition 
-const Blinky = ({ initialBoardData, pacmanPosition }) => {
-    const [boardData, setBoardData] = useState(initialBoardData);
+const Blinky = ({ initialBoardData, pacmanPosition, moveAwayTimer, setMoveAwayTimer }) => {
+  const [boardData, setBoardData] = useState(initialBoardData);
   const [blinkyPosition, setBlinkyPosition] = useState({ row:14, col: 11 });
 
 
+  // const moveBlinkyAway = () => {
+  //   const duration = 10; // Adjust the duration as needed
 
-  const [moveAwayTimer, setMoveAwayTimer] = useState(0);
+  //   setMoveAwayTimer(duration);
+
+  //   if (boardData[blinkyPosition.row][blinkyPosition.col] === 'U') {
+  //     const newPosition = { row: blinkyPosition.row - 1, col: blinkyPosition.col };
+  //     setBoardAndPosition(newPosition.row, newPosition.col);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (moveAwayTimer > 0) {
+  //     moveBlinkyAway();
+  //   } else {
+  //     const shortestPathNode = blinkysShortestPath(blinkyPosition, pacmanPosition);
+  
+  //     if (shortestPathNode) {
+  //       const path = [];
+  //       let currentBlinky = shortestPathNode;
+  
+  //       while (currentBlinky !== null) {
+  //         path.push(currentBlinky);
+  //         currentBlinky = currentBlinky.prev;
+  //       }
+  //       path.pop();
+  
+  //       if (path.length > 0) {
+  //         const nextPosition = path.pop();
+  //         setBoardAndPosition(nextPosition.row, nextPosition.col);
+  //       }
+  //     }
+  //   }
+  // }, [moveAwayTimer, pacmanPosition]);
+
+
+
 
 
   //"Breadth-First Search algorithm" genius. Finds shortest point between two points
@@ -48,23 +83,22 @@ const Blinky = ({ initialBoardData, pacmanPosition }) => {
 
 //calculates the shortest path using the bfsShortestPath function. clears blinkys previous position and sets its new position
   const moveBlinkyTowardsPacman = () => {
-
     if (moveAwayTimer > 0) {
       // Decrease the timer and continue moving Blinky away
       setMoveAwayTimer(prevTimer => prevTimer - 1);
-
+  
       // Code to move Blinky away from Pacman using the 'oppositePath'
       const oppositePathNode = blinkysShortestPath(blinkyPosition, pacmanPosition);
       if (oppositePathNode) {
         const oppositePath = [];
         let currentBlinky = oppositePathNode;
-
+  
         while (currentBlinky !== null) {
           oppositePath.push(currentBlinky);
           currentBlinky = currentBlinky.prev;
         }
         oppositePath.pop();
-
+  
         if (oppositePath.length > 0) {
           const nextPosition = oppositePath.pop();
           setBoardAndPosition(nextPosition.row, nextPosition.col);
@@ -111,33 +145,30 @@ const Blinky = ({ initialBoardData, pacmanPosition }) => {
 
 
 
-  const moveBlinkyAway = () => {
-    const duration = 20; //  10 steps for start
-
-    setMoveAwayTimer(duration);
-  };
-
-
 
 
   //listens for changes in pacmanPosition and triggers blinky
-  useEffect(() => {
-    console.log('Pacman position or boardData changed');
+  // useEffect(() => {
+  //   console.log('Pacman position or boardData changed');
 
-    moveBlinkyTowardsPacman();
-  }, [pacmanPosition, moveAwayTimer]);
+  //   moveBlinkyTowardsPacman();
+  // }, [pacmanPosition, moveAwayTimer]);
   
-  useEffect(() => {
-    const pacmanTile = boardData[pacmanPosition.row][pacmanPosition.col];
-    console.log(`Pacman tile value: '${pacmanTile}'`);
 
-    if (pacmanTile === 'U') {
-      console.log('Pacman is on a "U" block');
-      // Implement behavior for when Pac-Man lands on 'U'
-      // For instance, change Blinky's behavior or perform specific actions
-    }
-  }, [pacmanPosition, boardData]);
+
   
+  // useEffect(() => {
+  //   const pacmanTile = boardData[pacmanPosition.row][pacmanPosition.col];
+  //   console.log(`Pacman tile value: '${pacmanTile}'`);
+  
+  //   if (pacmanTile === 'U') {
+  //     console.log('Pacman is on a "U" block');
+  //     moveBlinkyAway();
+  //   } else {
+  //     moveBlinkyTowardsPacman();
+  //   }
+  // }, [pacmanPosition, boardData]);
+  //this causes G1 to teleport onto 'P' and overwrite it
 
   return (
     <div className="blinky-container">

@@ -41,6 +41,20 @@ const GamePage = () => {
   ]
   const [boardData, setBoardData] = useState(initialBoardData);
   const [pacmanPosition, setPacmanPosition] = useState({ row: 23, col: 13 });
+  const [pacmanOnU, setPacmanOnU] = useState(false);
+  const [moveAwayTimer, setMoveAwayTimer] = useState(0);
+
+  useEffect(() => {
+    const pacmanTile = boardData[pacmanPosition.row][pacmanPosition.col];
+
+    if (pacmanTile === 'U') {
+      console.log('Pacman is on a "U" block');
+      setPacmanOnU(true);
+    } else {
+      setPacmanOnU(false);
+    }
+  }, [pacmanPosition, boardData]);
+
 
   return (
     <div className="game-container">
@@ -53,9 +67,11 @@ const GamePage = () => {
         pacmanPosition={pacmanPosition}
         setPacmanPosition={setPacmanPosition}
         setBoardData={setBoardData}
+        setPacmanOnU={setPacmanOnU}
         
       />
-      <Blinky  boardData={boardData} initialBoardData={initialBoardData} pacmanPosition={pacmanPosition} />
+      <Blinky  boardData={boardData} initialBoardData={initialBoardData} pacmanPosition={pacmanPosition}
+      setMoveAwayTimer={setMoveAwayTimer} />
 
     </div>
   );
