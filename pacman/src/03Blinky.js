@@ -5,6 +5,8 @@ const Blinky = ({ initialBoardData, pacmanPosition }) => {
   const [boardData, setBoardData] = useState(initialBoardData);
   const [blinkyPosition, setBlinkyPosition] = useState({ row:14, col: 11 });
 
+
+  
   //"Breadth-First Search algorithm" genius. Finds shortest point between two points
   const blinkysShortestPath = (start, target) => {
     const queue = [{ ...start, prev: null }];
@@ -91,8 +93,15 @@ const Blinky = ({ initialBoardData, pacmanPosition }) => {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //calculates the shortest path using the bfsShortestPath function. clears blinkys previous position and sets its new position
+
 const moveBlinkyTowardsPacman = () => {
-  const pathNode = blinkyRuns(blinkyPosition, pacmanPosition);
+  let pathNode = null;
+
+  if (pacmanPosition.row === 22 && pacmanPosition.col === 25) {
+    pathNode = blinkyRuns(blinkyPosition, pacmanPosition);
+  } else {
+    pathNode = blinkysShortestPath(blinkyPosition, pacmanPosition);
+  }
 
   if (pathNode) {
     const path = [];
@@ -111,6 +120,7 @@ const moveBlinkyTowardsPacman = () => {
   }
 };
 
+
   const updateBlinkyPosition = (row, col) => {
     const newBoardData = [...boardData];
     newBoardData[blinkyPosition.row][blinkyPosition.col] = '.';
@@ -122,6 +132,8 @@ const moveBlinkyTowardsPacman = () => {
   useEffect(() => {
     moveBlinkyTowardsPacman(pacmanPosition);
   }, [pacmanPosition]);
+
+  
 
   return (
     <div className="blinky-container">
