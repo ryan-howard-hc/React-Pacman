@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 //gotta make sure to call pacmanPosition 
-const Blinky = ({ initialBoardData, pacmanPosition }) => {
+const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
   const [boardData, setBoardData] = useState(initialBoardData);
   const [blinkyPosition, setBlinkyPosition] = useState({ row:14, col: 11 });
+  const [useBlinkyRuns, setUseBlinkyRuns] = useState(false);
+  const [keyPressesAfterTrigger, setKeyPressesAfterTrigger] = useState(0);
 
 
   
@@ -95,43 +97,62 @@ const Blinky = ({ initialBoardData, pacmanPosition }) => {
 //calculates the shortest path using the bfsShortestPath function. clears blinkys previous position and sets its new position
 
 const moveBlinkyTowardsPacman = () => {
-  let pathNode = null;
-
   if (pacmanPosition.row === 22 && pacmanPosition.col === 25) {
-    pathNode = blinkyRuns(blinkyPosition, pacmanPosition);
-  } else {
-    pathNode = blinkysShortestPath(blinkyPosition, pacmanPosition);
+    setUseBlinkyRuns(true);
   }
 
-  if (pathNode) {
-    const path = [];
-    let currentNode = pathNode;
+  if (useBlinkyRuns && keyPressesAfterTrigger < 30) {
+    const pathNode = blinkyRuns(blinkyPosition, pacmanPosition);
 
-    while (currentNode !== null) {
-      path.push(currentNode);
-      currentNode = currentNode.prev;
+    if (pathNode) {
+      const path = [];
+      let currentNode = pathNode;
+
+      while (currentNode !== null) {
+        path.push(currentNode);
+        currentNode = currentNode.prev;
+      }
+      path.pop();
+
+      if (path.length > 0) {
+        const nextPosition = path.pop();
+        updateBlinkyPosition(nextPosition.row, nextPosition.col);
+      }
     }
-    path.pop();
 
-    if (path.length > 0) {
-      const nextPosition = path.pop();
-      updateBlinkyPosition(nextPosition.row, nextPosition.col);
+    setKeyPressesAfterTrigger(prevCount => prevCount + 1);
+  } else {
+    const pathNode = blinkysShortestPath(blinkyPosition, pacmanPosition);
+
+    if (pathNode) {
+      const path = [];
+      let currentNode = pathNode;
+
+      while (currentNode !== null) {
+        path.push(currentNode);
+        currentNode = currentNode.prev;
+      }
+      path.pop();
+
+      if (path.length > 0) {
+        const nextPosition = path.pop();
+        updateBlinkyPosition(nextPosition.row, nextPosition.col);
+      }
     }
   }
 };
 
+const updateBlinkyPosition = (row, col) => {
+  const newBoardData = [...boardData];
+  newBoardData[blinkyPosition.row][blinkyPosition.col] = '.';
+  newBoardData[row][col] = 'G1';
+  setBoardData(newBoardData);
+  setBlinkyPosition({ row, col });
+};
 
-  const updateBlinkyPosition = (row, col) => {
-    const newBoardData = [...boardData];
-    newBoardData[blinkyPosition.row][blinkyPosition.col] = '.';
-    newBoardData[row][col] = 'G1';
-    setBoardData(newBoardData);
-    setBlinkyPosition({ row, col });
-  };
-
-  useEffect(() => {
-    moveBlinkyTowardsPacman(pacmanPosition);
-  }, [pacmanPosition]);
+useEffect(() => {
+  moveBlinkyTowardsPacman();
+}, [keyPressCount, pacmanPosition]);
 
   
 
