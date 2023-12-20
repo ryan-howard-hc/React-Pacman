@@ -136,3 +136,24 @@ main_loop:
             scatter_mode = False
         else:
             scatter_mode = True
+
+
+
+
+### Teleportation from one end to the other
+
+on_ghost_move:
+    if ghost_position.x < left_boundary:
+        ghost_position.x = right_boundary  // Move to the right side
+    else if ghost_position.x > right_boundary:
+        ghost_position.x = left_boundary  // Move to the left side
+    else:
+        // Proceed with normal movement
+
+on_pacman_move:
+    if pacman_position.x < left_boundary:
+        pacman_position.x = right_boundary  // Move to the right side
+    else if pacman_position.x > right_boundary:
+        pacman_position.x = left_boundary  // Move to the left side
+    else:
+        // Proceed with normal movement
