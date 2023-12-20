@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 const Blinky = ({ initialBoardData, pacmanPosition }) => {
   const [boardData, setBoardData] = useState(initialBoardData);
   const [blinkyPosition, setBlinkyPosition] = useState({ row:14, col: 11 });
+  const [canMove, setCanMove] = useState(true); // State to control Blinky's movement
 
   //"Breadth-First Search algorithm" genius. Finds shortest point between two points
   const blinkysShortestPath = (start, target) => {
@@ -43,6 +44,14 @@ const Blinky = ({ initialBoardData, pacmanPosition }) => {
 
 //calculates the shortest path using the bfsShortestPath function. clears blinkys previous position and sets its new position
 const moveBlinkyTowardsPacman = () => {
+  if (pacmanPosition.row === 23 && pacmanPosition.col === 25) {
+    setCanMove(false); // updates state to prevent further movement
+    return;
+  }
+
+  if (!canMove) {
+    return; // if canMove is false, don't proceed with movement
+  }
   const pathNode = blinkysShortestPath(blinkyPosition, pacmanPosition);
 
   if (pathNode) {
