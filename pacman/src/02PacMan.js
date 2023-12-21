@@ -45,6 +45,7 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
 
     }
     handleKeyPress();
+    console.log(`Pac-Man is at row: ${newRow}, col: ${newCol}`);
 
   };
 
@@ -59,7 +60,7 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
   }, [boardData, pacmanPosition, setPacmanPosition, setBoardData, handleKeyPress]);
 
 
-  return null; // placeholder for image if i want to add
+  return null; 
 };
 
 export default PacMan;

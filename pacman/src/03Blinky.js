@@ -107,7 +107,14 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
 //calculates the shortest path using the bfsShortestPath function. clears blinkys previous position and sets its new position
 
 const moveBlinkyTowardsPacman = () => {
-  if (pacmanPosition.row === 22 && pacmanPosition.col === 25) {
+  if (
+    (pacmanPosition.row === 23 && pacmanPosition.col === 25) ||
+    (pacmanPosition.row === 3 && pacmanPosition.col === 1) ||
+    (pacmanPosition.row === 3 && pacmanPosition.col === 25) ||
+    (pacmanPosition.row === 23 && pacmanPosition.col === 1)
+  ) {
+    console.log('RUN BLINKY!');
+
     setUseBlinkyRuns(true);
   }
 
