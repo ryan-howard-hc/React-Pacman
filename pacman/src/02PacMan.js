@@ -36,17 +36,6 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
         return;
     }
 
-
-    // if (boardData[newRow] && boardData[newRow][newCol] !== 'X') {
-    //   const nextTile = boardData[newRow][newCol];
-
-    //   if (nextTile !== 'X') {
-    //     setPacmanPosition({ row: newRow, col: newCol });
-    //   }
-    //
-
-
-
     if (boardData[newRow] && boardData[newRow][newCol] !== 'X') {
       const newBoardData = [...boardData];
       newBoardData[row][col] = '.';
@@ -54,23 +43,9 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
       setBoardData(newBoardData);
       setPacmanPosition({ row: newRow, col: newCol });
 
-
-
-      // const previousTile = boardData[newRow][newCol]; // captures the previous value before any change
-    
-      // if (previousTile !== 'P') {
-      //   const newBoardData = boardData.map((row) => [...row]);
-      //   newBoardData[row][col] = previousTile; // updates with the previous tile value
-      //   newBoardData[newRow][newCol] = 'P';
-    
-      //   console.log(`Previous tile value: ${previousTile}`); // previous tile value
-      //   console.log(`New tile value: P`); //  new tile value
-    
-      //   setBoardData(newBoardData);
-      //   setPacmanPosition({ row: newRow, col: newCol });
-      // }
     }
     handleKeyPress();
+    console.log(`Pac-Man is at row: ${newRow}, col: ${newCol}`);
 
   };
 
@@ -85,10 +60,7 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
   }, [boardData, pacmanPosition, setPacmanPosition, setBoardData, handleKeyPress]);
 
 
-
-  
-
-  return null; // placeholder for image if i want to add
+  return null; 
 };
 
 export default PacMan;
