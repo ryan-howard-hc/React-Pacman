@@ -11,30 +11,34 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
   
   //"Breadth-First Search algorithm" genius. Finds shortest point between two points
   const blinkysShortestPath = (start, target) => {
+    const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
     const queue = [{ ...start, prev: null }];
     const visited = new Set();
-    const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]]; //up,down,right,left
   
     while (queue.length > 0) {
       const current = queue.shift();
       const { row, col } = current;
   
-      if (row === target.row && col === target.col) {
-        return current;
-      }
-  
       for (const [dx, dy] of directions) {
         const newRow = row + dx;
-        const newCol = col + dy;
+        let newCol = col + dy;
+  
+        if (newCol < 0) {
+          newCol = boardData[0].length - 1; // Move to the last column
+        } else if (newCol >= boardData[0].length) {
+          newCol = 0; // Move to the first column
+        }
   
         if (
           newRow >= 0 &&
           newRow < boardData.length &&
-          newCol >= 0 &&
-          newCol < boardData[0].length &&
-          boardData[newRow][newCol] !== 'X' && //checks valid position. cant go through walls
+          boardData[newRow][newCol] !== 'X' &&
           !visited.has(`${newRow},${newCol}`)
         ) {
+          if (newRow === target.row && newCol === target.col) {
+            return current;
+          }
+  
           queue.push({ row: newRow, col: newCol, prev: current });
           visited.add(`${newRow},${newCol}`);
         }
@@ -59,8 +63,14 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
         //checks each direction blinky can move from its current position.
 
         const newRow = row + dx;
-        const newCol = col + dy;
+        let newCol = col + dy;
         //these two calculate new positions blinky will be in if blinky moves
+
+        if (newCol < 0) {
+          newCol = boardData[0].length - 1; //moves to the last column
+        } else if (newCol >= boardData[0].length) {
+          newCol = 0; //moves to the first column
+        }
 
         if (
           //if statement to check if move is valid
