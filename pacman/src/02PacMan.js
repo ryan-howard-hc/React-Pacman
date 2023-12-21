@@ -3,17 +3,12 @@ import React, { useEffect } from 'react';
 const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, handleKeyPress }) => {
   
   const handleKeyDown = (event) => {
-
     const { key } = event;
     const { row, col } = pacmanPosition;
-    
-    console.log('Pacman Position:', pacmanPosition);
-    console.log('Board Data:', boardData);
-  
   
     let newRow = row;
     let newCol = col;
-
+  
     switch (key) {
       case 'ArrowUp':
         newRow = row - 1;
@@ -22,10 +17,20 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
         newRow = row + 1;
         break;
       case 'ArrowLeft':
-        newCol = col - 1;
+        //checks if pacman is in the first column and moving left
+        if (col === 0) {
+          newCol = boardData[0].length - 1; //moves to the last column
+        } else {
+          newCol = col - 1;
+        }
         break;
       case 'ArrowRight':
-        newCol = col + 1;
+        //checks if pacman is in the last column and moving right
+        if (col === boardData[0].length - 1) {
+          newCol = 0; //moves to the first column
+        } else {
+          newCol = col + 1;
+        }
         break;
       default:
         return;
