@@ -102,12 +102,13 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
     return null;
   };
   
-  const moveBlinkyRandomly = () => {
+  const moveAlongRandomRow = () => {
+    const currentRow = blinkyPosition.row;
     const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
     const validMoves = [];
   
     for (const [dx, dy] of directions) {
-      const newRow = blinkyPosition.row + dx;
+      const newRow = currentRow + dx;
       let newCol = blinkyPosition.col + dy;
   
       if (newCol < 0) {
@@ -224,14 +225,12 @@ const updateBlinkyPosition = (row, col) => {
 
 
 useEffect(() => {
-  if (!useBlinkyRuns) {
-    // Random movement before chasing
-    moveBlinkyRandomly();
+  if (keyPressCount < 50) {
+    moveAlongRandomRow();
   } else {
-    // Chase Pac-Man
     moveBlinkyTowardsPacman();
   }
-}, [keyPressCount, pacmanPosition, useBlinkyRuns]);
+}, [keyPressCount, pacmanPosition]);
 
   
 
