@@ -7,7 +7,10 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
   const [useBlinkyRuns, setUseBlinkyRuns] = useState(false);
   const [keyPressesAfterTrigger, setKeyPressesAfterTrigger] = useState(0);
 
-
+  const [pacmanMovementCount, setPacmanMovementCount] = useState(0);
+  useEffect(() => {
+    setPacmanMovementCount(Math.floor(keyPressCount / 2)); // Assuming Pac-Man moves twice per key press
+  }, [keyPressCount]);
   
   //"Breadth-First Search algorithm" genius. Finds shortest point between two points
   const blinkysShortestPath = (start, target) => {
@@ -116,24 +119,27 @@ const moveBlinkyTowardsPacman = () => {
     console.log('RUN BLINKY!');
 
     setUseBlinkyRuns(true);
+    setKeyPressesAfterTrigger(0);
   }
 
   if (useBlinkyRuns && keyPressesAfterTrigger < 30) {
-    const pathNode = blinkyRuns(blinkyPosition, pacmanPosition);
+    if (keyPressesAfterTrigger % 2 === 0) {
+      const pathNode = blinkyRuns(blinkyPosition, pacmanPosition);
+      
+      if (pathNode) {
+        const path = [];
+        let currentNode = pathNode;
 
-    if (pathNode) {
-      const path = [];
-      let currentNode = pathNode;
+        while (currentNode !== null) {
+          path.push(currentNode);
+          currentNode = currentNode.prev;
+        }
+        path.pop();
 
-      while (currentNode !== null) {
-        path.push(currentNode);
-        currentNode = currentNode.prev;
-      }
-      path.pop();
-
-      if (path.length > 0) {
-        const nextPosition = path.pop();
-        updateBlinkyPosition(nextPosition.row, nextPosition.col);
+        if (path.length > 0) {
+          const nextPosition = path.pop();
+          updateBlinkyPosition(nextPosition.row, nextPosition.col);
+        }
       }
     }
 
@@ -160,12 +166,21 @@ const moveBlinkyTowardsPacman = () => {
 };
 
 const updateBlinkyPosition = (row, col) => {
+  const cellValue = boardData[row][col];
+
+  if (cellValue === 'U') {
+    setBlinkyPosition({ row, col });
+    return;
+  }
+
   const newBoardData = [...boardData];
   newBoardData[blinkyPosition.row][blinkyPosition.col] = '.';
   newBoardData[row][col] = 'G1';
   setBoardData(newBoardData);
   setBlinkyPosition({ row, col });
 };
+
+
 
 useEffect(() => {
   moveBlinkyTowardsPacman();
