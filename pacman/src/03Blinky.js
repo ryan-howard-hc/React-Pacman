@@ -102,6 +102,34 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
     return null;
   };
   
+  const moveBlinkyRandomly = () => {
+    const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+    const validMoves = [];
+  
+    for (const [dx, dy] of directions) {
+      const newRow = blinkyPosition.row + dx;
+      let newCol = blinkyPosition.col + dy;
+  
+      if (newCol < 0) {
+        newCol = boardData[0].length - 1;
+      } else if (newCol >= boardData[0].length) {
+        newCol = 0;
+      }
+  
+      if (
+        newRow >= 0 &&
+        newRow < boardData.length &&
+        boardData[newRow][newCol] === '.'
+      ) {
+        validMoves.push({ row: newRow, col: newCol });
+      }
+    }
+  
+    if (validMoves.length > 0) {
+      const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
+      updateBlinkyPosition(randomMove.row, randomMove.col);
+    }
+  };
   
   
   
@@ -166,25 +194,44 @@ const moveBlinkyTowardsPacman = () => {
 };
 
 const updateBlinkyPosition = (row, col) => {
-  const cellValue = boardData[row][col];
-
-  if (cellValue === 'U') {
-    setBlinkyPosition({ row, col });
-    return;
-  }
-
   const newBoardData = [...boardData];
-  newBoardData[blinkyPosition.row][blinkyPosition.col] = '.';
-  newBoardData[row][col] = 'G1';
-  setBoardData(newBoardData);
-  setBlinkyPosition({ row, col });
+  const cellValue = newBoardData[row][col];
+
+  if (cellValue !== 'U') {
+    newBoardData[blinkyPosition.row][blinkyPosition.col] = '.';
+    newBoardData[row][col] = 'G1';
+    setBoardData(newBoardData);
+    setBlinkyPosition({ row, col });
+  } else {
+    const rowDiff = row - blinkyPosition.row;
+    const colDiff = col - blinkyPosition.col;
+    const nextRow = row + rowDiff;
+    const nextCol = col + colDiff;
+
+    if (newBoardData[nextRow]?.[nextCol] !== undefined) {
+      newBoardData[blinkyPosition.row][blinkyPosition.col] = '.';
+      newBoardData[nextRow][nextCol] = 'U'; // makes the power-up remain in the cell after Blinky passes over it
+      setBoardData(newBoardData);
+      setBlinkyPosition({ row: nextRow, col: nextCol });
+    } else {
+      newBoardData[blinkyPosition.row][blinkyPosition.col] = 'U';
+      setBoardData(newBoardData);
+      setBlinkyPosition({ row, col });
+    }
+  }
 };
 
 
 
 useEffect(() => {
-  moveBlinkyTowardsPacman();
-}, [keyPressCount, pacmanPosition]);
+  if (!useBlinkyRuns) {
+    // Random movement before chasing
+    moveBlinkyRandomly();
+  } else {
+    // Chase Pac-Man
+    moveBlinkyTowardsPacman();
+  }
+}, [keyPressCount, pacmanPosition, useBlinkyRuns]);
 
   
 

@@ -35,9 +35,7 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
       default:
         return;
     }
-    const isBlinkyOnPowerUp = () => {
-      return boardData[blinkyPosition.row][blinkyPosition.col] === 'U';
-    };
+
 
     if (boardData[newRow] && boardData[newRow][newCol] !== 'X') {
       const newBoardData = [...boardData];
