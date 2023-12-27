@@ -7,7 +7,10 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
   const [useBlinkyRuns, setUseBlinkyRuns] = useState(false);
   const [keyPressesAfterTrigger, setKeyPressesAfterTrigger] = useState(0);
 
-
+  const [pacmanMovementCount, setPacmanMovementCount] = useState(0);
+  useEffect(() => {
+    setPacmanMovementCount(Math.floor(keyPressCount / 2)); // Assuming Pac-Man moves twice per key press
+  }, [keyPressCount]);
   
   //"Breadth-First Search algorithm" genius. Finds shortest point between two points
   const blinkysShortestPath = (start, target) => {
@@ -99,6 +102,34 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
     return null;
   };
   
+  const moveBlinkyRandomly = () => {
+    const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+    const validMoves = [];
+  
+    for (const [dx, dy] of directions) {
+      const newRow = blinkyPosition.row + dx;
+      let newCol = blinkyPosition.col + dy;
+  
+      if (newCol < 0) {
+        newCol = boardData[0].length - 1;
+      } else if (newCol >= boardData[0].length) {
+        newCol = 0;
+      }
+  
+      if (
+        newRow >= 0 &&
+        newRow < boardData.length &&
+        boardData[newRow][newCol] === '.'
+      ) {
+        validMoves.push({ row: newRow, col: newCol });
+      }
+    }
+  
+    if (validMoves.length > 0) {
+      const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
+      updateBlinkyPosition(randomMove.row, randomMove.col);
+    }
+  };
   
   
   
@@ -116,24 +147,27 @@ const moveBlinkyTowardsPacman = () => {
     console.log('RUN BLINKY!');
 
     setUseBlinkyRuns(true);
+    setKeyPressesAfterTrigger(0);
   }
 
   if (useBlinkyRuns && keyPressesAfterTrigger < 30) {
-    const pathNode = blinkyRuns(blinkyPosition, pacmanPosition);
+    if (keyPressesAfterTrigger % 2 === 0) {
+      const pathNode = blinkyRuns(blinkyPosition, pacmanPosition);
+      
+      if (pathNode) {
+        const path = [];
+        let currentNode = pathNode;
 
-    if (pathNode) {
-      const path = [];
-      let currentNode = pathNode;
+        while (currentNode !== null) {
+          path.push(currentNode);
+          currentNode = currentNode.prev;
+        }
+        path.pop();
 
-      while (currentNode !== null) {
-        path.push(currentNode);
-        currentNode = currentNode.prev;
-      }
-      path.pop();
-
-      if (path.length > 0) {
-        const nextPosition = path.pop();
-        updateBlinkyPosition(nextPosition.row, nextPosition.col);
+        if (path.length > 0) {
+          const nextPosition = path.pop();
+          updateBlinkyPosition(nextPosition.row, nextPosition.col);
+        }
       }
     }
 
@@ -161,15 +195,43 @@ const moveBlinkyTowardsPacman = () => {
 
 const updateBlinkyPosition = (row, col) => {
   const newBoardData = [...boardData];
-  newBoardData[blinkyPosition.row][blinkyPosition.col] = '.';
-  newBoardData[row][col] = 'G1';
-  setBoardData(newBoardData);
-  setBlinkyPosition({ row, col });
+  const cellValue = newBoardData[row][col];
+
+  if (cellValue !== 'U') {
+    newBoardData[blinkyPosition.row][blinkyPosition.col] = '.';
+    newBoardData[row][col] = 'G1';
+    setBoardData(newBoardData);
+    setBlinkyPosition({ row, col });
+  } else {
+    const rowDiff = row - blinkyPosition.row;
+    const colDiff = col - blinkyPosition.col;
+    const nextRow = row + rowDiff;
+    const nextCol = col + colDiff;
+
+    if (newBoardData[nextRow]?.[nextCol] !== undefined) {
+      newBoardData[blinkyPosition.row][blinkyPosition.col] = '.';
+      newBoardData[nextRow][nextCol] = 'U'; // makes the power-up remain in the cell after Blinky passes over it
+      setBoardData(newBoardData);
+      setBlinkyPosition({ row: nextRow, col: nextCol });
+    } else {
+      newBoardData[blinkyPosition.row][blinkyPosition.col] = 'U';
+      setBoardData(newBoardData);
+      setBlinkyPosition({ row, col });
+    }
+  }
 };
 
+
+
 useEffect(() => {
-  moveBlinkyTowardsPacman();
-}, [keyPressCount, pacmanPosition]);
+  if (!useBlinkyRuns) {
+    // Random movement before chasing
+    moveBlinkyRandomly();
+  } else {
+    // Chase Pac-Man
+    moveBlinkyTowardsPacman();
+  }
+}, [keyPressCount, pacmanPosition, useBlinkyRuns]);
 
   
 

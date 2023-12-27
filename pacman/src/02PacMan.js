@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, handleKeyPress }) => {
+const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, handleKeyPress, blinkyPosition }) => {
   
   const handleKeyDown = (event) => {
     const { key } = event;
@@ -35,6 +35,7 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
       default:
         return;
     }
+
 
     if (boardData[newRow] && boardData[newRow][newCol] !== 'X') {
       const newBoardData = [...boardData];
