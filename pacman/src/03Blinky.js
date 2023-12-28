@@ -6,7 +6,9 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
   const [blinkyPosition, setBlinkyPosition] = useState({ row:14, col: 11 });
   const [useBlinkyRuns, setUseBlinkyRuns] = useState(false);
   const [keyPressesAfterTrigger, setKeyPressesAfterTrigger] = useState(0);
-
+  const [blinkyMoveCount, setBlinkyMoveCount] = useState(0);
+  const [movePatternComplete, setMovePatternComplete] = useState(false);
+  
   const [pacmanMovementCount, setPacmanMovementCount] = useState(0);
   useEffect(() => {
     setPacmanMovementCount(Math.floor(keyPressCount / 2)); // Assuming Pac-Man moves twice per key press
@@ -102,62 +104,85 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
     return null;
   };
   
+
+  
   const moveAlongRandomRow = () => {
-    const currentRow = blinkyPosition.row;
-    const currentCol = blinkyPosition.col;
-    const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
-    const validMoves = [];
+    const leftBoxBound = 11;
+    const rightBoxBound = 17;
+    const topBoxBound = 13;
+    const bottomBoxBound = 18;
   
-    // checsk if blinky is within the specified area
-    if (
-      currentRow >= 12 &&
-      currentRow <= 17 &&
-      currentCol >= 10 &&
-      currentCol <= 16
-    ) {
-      for (const [dx, dy] of directions) {
-        const newRow = currentRow + dx;
-        let newCol = currentCol + dy;
+    let newRow, newCol;
   
-        // checks if  position is outside the specified area
-        if (
-          newRow < 12 ||
-          newRow > 17 ||
-          newCol < 10 ||
-          newCol > 16 ||
-          boardData[newRow][newCol] !== '.'
-        ) {
-          updateBlinkyPosition(newRow, newCol);
-          return;
-        }
-      }
+    if (blinkyMoveCount === 0) {
+      newRow = blinkyPosition.row - 1;
+      newCol = blinkyPosition.col; 
+    } else if (blinkyMoveCount === 1 || blinkyMoveCount === 2) {
+      newRow = blinkyPosition.row;
+      newCol = blinkyPosition.col + 1;
+    } else if (blinkyMoveCount === 2 || blinkyMoveCount === 3) {
+      newRow = blinkyPosition.row;
+      newCol = blinkyPosition.col + 1;
+    } else if (blinkyMoveCount === 3 || blinkyMoveCount === 4) {
+      newRow = blinkyPosition.row - 1;
+      newCol = blinkyPosition.col; 
+    } else if (blinkyMoveCount === 4 || blinkyMoveCount === 5) {
+      newRow = blinkyPosition.row - 1;
+      newCol = blinkyPosition.col; 
+    } else if (blinkyMoveCount === 5 || blinkyMoveCount === 6) {
+      newRow = blinkyPosition.row - 1;
+      newCol = blinkyPosition.col;
     }
   
-    // if blinky is not within the specified area or has moved out, move randomly along a row
-    for (const [dx, dy] of directions) {
-      const newRow = currentRow + dx;
-      let newCol = currentCol + dy;
+    // checks if the movement is within boundaries and valid
+    if (
+      newRow >= 0 &&
+      newRow < boardData.length &&
+      newCol >= 0 &&
+      newCol < boardData[0].length &&
+      boardData[newRow][newCol] === '.' &&
+      (blinkyMoveCount >= 5 ||
+        !( // Prevent movement into the restricted area
+          newRow < topBoxBound ||
+          newRow > bottomBoxBound ||
+          newCol < leftBoxBound ||
+          newCol > rightBoxBound
+        ))
+    ) {
+      updateBlinkyPosition(newRow, newCol);
+    } else {
+      // Move randomly until an obstacle is encountered
+      const directions = [
+        { rowChange: -1, colChange: 0 }, // Move up
+        { rowChange: 0, colChange: 1 }, // Move right
+        { rowChange: 0, colChange: -1 }, // Move left
+        { rowChange: 1, colChange: 0 }, // Move down
+      ];
   
-      if (newCol < 0) {
-        newCol = boardData[0].length - 1;
-      } else if (newCol >= boardData[0].length) {
-        newCol = 0;
-      }
+      const randomDirection = directions[Math.floor(Math.random() * directions.length)];
+      newRow = blinkyPosition.row + randomDirection.rowChange;
+      newCol = blinkyPosition.col + randomDirection.colChange;
   
       if (
         newRow >= 0 &&
         newRow < boardData.length &&
-        boardData[newRow][newCol] === '.'
+        newCol >= 0 &&
+        newCol < boardData[0].length &&
+        boardData[newRow][newCol] === '.' &&
+        !( // Prevent movement into the restricted area
+          newRow < topBoxBound ||
+          newRow > bottomBoxBound ||
+          newCol < leftBoxBound ||
+          newCol > rightBoxBound
+        )
       ) {
-        validMoves.push({ row: newRow, col: newCol });
+        updateBlinkyPosition(newRow, newCol);
       }
     }
   
-    if (validMoves.length > 0) {
-      const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
-      updateBlinkyPosition(randomMove.row, randomMove.col);
-    }
+    setBlinkyMoveCount(prevCount => prevCount + 1);
   };
+  
   
   
   
