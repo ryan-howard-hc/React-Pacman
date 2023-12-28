@@ -104,12 +104,39 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
   
   const moveAlongRandomRow = () => {
     const currentRow = blinkyPosition.row;
+    const currentCol = blinkyPosition.col;
     const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
     const validMoves = [];
   
+    // checsk if blinky is within the specified area
+    if (
+      currentRow >= 12 &&
+      currentRow <= 17 &&
+      currentCol >= 10 &&
+      currentCol <= 16
+    ) {
+      for (const [dx, dy] of directions) {
+        const newRow = currentRow + dx;
+        let newCol = currentCol + dy;
+  
+        // checks if  position is outside the specified area
+        if (
+          newRow < 12 ||
+          newRow > 17 ||
+          newCol < 10 ||
+          newCol > 16 ||
+          boardData[newRow][newCol] !== '.'
+        ) {
+          updateBlinkyPosition(newRow, newCol);
+          return;
+        }
+      }
+    }
+  
+    // if blinky is not within the specified area or has moved out, move randomly along a row
     for (const [dx, dy] of directions) {
       const newRow = currentRow + dx;
-      let newCol = blinkyPosition.col + dy;
+      let newCol = currentCol + dy;
   
       if (newCol < 0) {
         newCol = boardData[0].length - 1;
@@ -131,6 +158,8 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
       updateBlinkyPosition(randomMove.row, randomMove.col);
     }
   };
+  
+  
   
   
   
