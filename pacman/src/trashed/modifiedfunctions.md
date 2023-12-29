@@ -98,3 +98,102 @@
 
 
 
+
+
+
+
+<!--     if (blinkyMoveCount === 0) {
+      updateBlinkyPosition(blinkyPosition.row - 1, blinkyPosition.col); // Move up one
+    } else if (blinkyMoveCount === 1 || blinkyMoveCount === 2) {
+      updateBlinkyPosition(blinkyPosition.row, blinkyPosition.col + 1);
+    } else if (blinkyMoveCount === 2 || blinkyMoveCount === 3) {
+      updateBlinkyPosition(blinkyPosition.row, blinkyPosition.col + 1);
+       // Move to the right twice
+        } else if (blinkyMoveCount === 3 || blinkyMoveCount === 4) {
+      updateBlinkyPosition(blinkyPosition.row - 1, blinkyPosition.col); // Move up twice
+    } 
+   else if (blinkyMoveCount === 4 || blinkyMoveCount === 5) {
+    updateBlinkyPosition(blinkyPosition.row - 1, blinkyPosition.col); // Move up twice
+  } else { -->
+
+
+
+  <!--   
+  const moveAlongRandomRow = () => {
+    const leftBoxBound = 11;
+    const rightBoxBound = 17;
+    const topBoxBound = 13;
+    const bottomBoxBound = 18;
+  
+    let newRow, newCol;
+  
+    if (blinkyMoveCount === 0) {
+      newRow = blinkyPosition.row - 1;
+      newCol = blinkyPosition.col; 
+    } else if (blinkyMoveCount === 1 || blinkyMoveCount === 2) {
+      newRow = blinkyPosition.row;
+      newCol = blinkyPosition.col + 1;
+    } else if (blinkyMoveCount === 2 || blinkyMoveCount === 3) {
+      newRow = blinkyPosition.row;
+      newCol = blinkyPosition.col + 1;
+    } else if (blinkyMoveCount === 3 || blinkyMoveCount === 4) {
+      newRow = blinkyPosition.row - 1;
+      newCol = blinkyPosition.col; 
+    } else if (blinkyMoveCount === 4 || blinkyMoveCount === 5) {
+      newRow = blinkyPosition.row - 1;
+      newCol = blinkyPosition.col; 
+    } else if (blinkyMoveCount === 5 || blinkyMoveCount === 6) {
+      newRow = blinkyPosition.row - 1;
+      newCol = blinkyPosition.col;
+    }
+  
+    // checks if the movement is within boundaries and valid
+    if (
+      newRow >= 0 &&
+      newRow < boardData.length &&
+      newCol >= 0 &&
+      newCol < boardData[0].length &&
+      boardData[newRow][newCol] === '.' &&
+      (blinkyMoveCount >= 5 ||
+        !( // Prevent movement into the restricted area
+          newRow < topBoxBound ||
+          newRow > bottomBoxBound ||
+          newCol < leftBoxBound ||
+          newCol > rightBoxBound
+        ))
+    ) {
+      updateBlinkyPosition(newRow, newCol);
+    } else {
+      // Move randomly until an obstacle is encountered
+      const directions = [
+        { rowChange: -1, colChange: 0 }, // Move up
+        { rowChange: 0, colChange: 1 }, // Move right
+        { rowChange: 0, colChange: -1 }, // Move left
+        { rowChange: 1, colChange: 0 }, // Move down
+      ];
+  
+      const randomDirection = directions[Math.floor(Math.random() * directions.length)];
+      newRow = blinkyPosition.row + randomDirection.rowChange;
+      newCol = blinkyPosition.col + randomDirection.colChange;
+  
+      if (
+        newRow >= 0 &&
+        newRow < boardData.length &&
+        newCol >= 0 &&
+        newCol < boardData[0].length &&
+        boardData[newRow][newCol] === '.' &&
+        !( // Prevent movement into the restricted area
+          newRow < topBoxBound ||
+          newRow > bottomBoxBound ||
+          newCol < leftBoxBound ||
+          newCol > rightBoxBound
+        )
+      ) {
+        updateBlinkyPosition(newRow, newCol);
+      }
+    }
+  
+    setBlinkyMoveCount(prevCount => prevCount + 1);
+  };
+  
+   -->

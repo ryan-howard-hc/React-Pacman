@@ -6,6 +6,9 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
   const [blinkyPosition, setBlinkyPosition] = useState({ row:14, col: 11 });
   const [useBlinkyRuns, setUseBlinkyRuns] = useState(false);
   const [keyPressesAfterTrigger, setKeyPressesAfterTrigger] = useState(0);
+  const [blinkyMoveCount, setBlinkyMoveCount] = useState(0);
+  const [movePatternComplete, setMovePatternComplete] = useState(false);
+  const [currentDirection, setCurrentDirection] = useState(''); //new state variable to store the current direction for movealongsequence
 
   const [pacmanMovementCount, setPacmanMovementCount] = useState(0);
   useEffect(() => {
@@ -50,6 +53,17 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
   
     return null;
   };
+
+
+  // const shuffleArray = (array) => {
+  //   for (let i = array.length - 1; i > 0; i--) {
+  //     const j = Math.floor(Math.random() * (i + 1));
+  //     [array[i], array[j]] = [array[j], array[i]];
+  //   }
+  //   return array;
+  // };
+  
+
 
   const blinkyRuns = (start, target) => {
     const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
@@ -102,34 +116,88 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
     return null;
   };
   
-  const moveBlinkyRandomly = () => {
-    const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
-    const validMoves = [];
+
   
-    for (const [dx, dy] of directions) {
-      const newRow = blinkyPosition.row + dx;
-      let newCol = blinkyPosition.col + dy;
+  const moveAlongSequence = () => {
+    const directions = ['left', 'right', 'up', 'down'];
+    let newRow = blinkyPosition.row;
+    let newCol = blinkyPosition.col;
   
-      if (newCol < 0) {
-        newCol = boardData[0].length - 1;
-      } else if (newCol >= boardData[0].length) {
-        newCol = 0;
-      }
+    for (let i = directions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [directions[i], directions[j]] = [directions[j], directions[i]];
+    }
+
+
+    if (blinkyMoveCount <= 6) {
+      // Existing logic for initial movements
+      if (blinkyMoveCount === 0) {
+        newRow = blinkyPosition.row - 1;
+        newCol = blinkyPosition.col;
+      } else if (blinkyMoveCount === 1 || blinkyMoveCount === 2) {
+        newRow = blinkyPosition.row;
+        newCol = blinkyPosition.col + 1;
+      } else if (blinkyMoveCount === 2 || blinkyMoveCount === 3) {
+        newRow = blinkyPosition.row;
+        newCol = blinkyPosition.col + 1;
+      } else if (blinkyMoveCount === 3 || blinkyMoveCount === 4) {
+        newRow = blinkyPosition.row - 1;
+        newCol = blinkyPosition.col;
+      } else if (blinkyMoveCount === 4 || blinkyMoveCount === 5) {
+        newRow = blinkyPosition.row - 1;
+        newCol = blinkyPosition.col;
+      } 
   
       if (
         newRow >= 0 &&
         newRow < boardData.length &&
+        newCol >= 0 &&
+        newCol < boardData[0].length &&
         boardData[newRow][newCol] === '.'
       ) {
-        validMoves.push({ row: newRow, col: newCol });
+        updateBlinkyPosition(newRow, newCol);
+      }
+  
+      if (blinkyMoveCount === 6) {
+        setMovePatternComplete(true);
+      }
+    } else {
+      let moveMade = false; // tracks if a move was made in this iteration
+
+      // checksk if there's a current direction
+      if (currentDirection) {
+        // Continue moving in the current direction if possible
+        if (currentDirection === 'left' && newCol > 0 && boardData[newRow][newCol - 1] === '.') {
+          newCol -= 1;
+          moveMade = true;
+        } else if (currentDirection === 'right' && newCol < boardData[0].length - 1 && boardData[newRow][newCol + 1] === '.') {
+          newCol += 1;
+          moveMade = true;
+        } else if (currentDirection === 'up' && newRow > 0 && boardData[newRow - 1][newCol] === '.') {
+          newRow -= 1;
+          moveMade = true;
+        } else if (currentDirection === 'down' && newRow < boardData.length - 1 && boardData[newRow + 1][newCol] === '.') {
+          newRow += 1;
+          moveMade = true;
+        }
+      }
+  
+      // if no move was made, choose a new random direction
+      if (!moveMade) {
+        const newDirection = directions[Math.floor(Math.random() * directions.length)];
+        setCurrentDirection(newDirection);
+      }
+  
+      // updates position if a move was made
+      if (moveMade) {
+        updateBlinkyPosition(newRow, newCol);
       }
     }
   
-    if (validMoves.length > 0) {
-      const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
-      updateBlinkyPosition(randomMove.row, randomMove.col);
-    }
+    setBlinkyMoveCount(prevCount => prevCount + 1);
   };
+  
+  
   
   
   
@@ -202,6 +270,8 @@ const updateBlinkyPosition = (row, col) => {
     newBoardData[row][col] = 'G1';
     setBoardData(newBoardData);
     setBlinkyPosition({ row, col });
+    console.log(`Blinky is at row: ${row}, col: ${col}`);
+
   } else {
     const rowDiff = row - blinkyPosition.row;
     const colDiff = col - blinkyPosition.col;
@@ -213,10 +283,14 @@ const updateBlinkyPosition = (row, col) => {
       newBoardData[nextRow][nextCol] = 'U'; // makes the power-up remain in the cell after Blinky passes over it
       setBoardData(newBoardData);
       setBlinkyPosition({ row: nextRow, col: nextCol });
+      console.log(`Blinky is at row: ${nextRow}, col: ${nextCol}`);
+
     } else {
       newBoardData[blinkyPosition.row][blinkyPosition.col] = 'U';
       setBoardData(newBoardData);
       setBlinkyPosition({ row, col });
+      console.log(`Blinky is at row: ${row}, col: ${col}`);
+
     }
   }
 };
@@ -224,14 +298,12 @@ const updateBlinkyPosition = (row, col) => {
 
 
 useEffect(() => {
-  if (!useBlinkyRuns) {
-    // Random movement before chasing
-    moveBlinkyRandomly();
+  if (keyPressCount < 50) {
+    moveAlongSequence();
   } else {
-    // Chase Pac-Man
     moveBlinkyTowardsPacman();
   }
-}, [keyPressCount, pacmanPosition, useBlinkyRuns]);
+}, [keyPressCount, pacmanPosition]);
 
   
 
