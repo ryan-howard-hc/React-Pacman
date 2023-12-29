@@ -53,6 +53,17 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
     return null;
   };
 
+
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+  
+
+
   const blinkyRuns = (start, target) => {
     const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
     const queue = [{ ...start, prev: null }];
@@ -144,17 +155,42 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
         setMovePatternComplete(true);
       }
     } else {
+      // Logic for random movement when the initial sequence is completed
+      const possibleMoves = [];
+  
+      // Check for available directions
       if (boardData[newRow][newCol - 1] !== 'X') {
-        // move left if possible
-        newCol = blinkyPosition.col - 1;
-      } else if (boardData[newRow][newCol + 1] !== 'X') {
-        // move right if possible
-        newCol = blinkyPosition.col + 1;
+        possibleMoves.push('LEFT');
+      }
+      if (boardData[newRow][newCol + 1] !== 'X') {
+        possibleMoves.push('RIGHT');
+      }
+      if (boardData[newRow - 1][newCol] !== 'X') {
+        possibleMoves.push('UP');
+      }
+      if (boardData[newRow + 1][newCol] !== 'X') {
+        possibleMoves.push('DOWN');
       }
   
-      // updates blinky's position if it can move left or right
-      if (newCol !== blinkyPosition.col) {
-        updateBlinkyPosition(newRow, newCol);
+      if (possibleMoves.length > 0) {
+        const shuffledMoves = shuffleArray(possibleMoves);
+  
+        // Choose the first available direction after shuffling
+        if (shuffledMoves.includes('LEFT')) {
+          newCol = blinkyPosition.col - 1;
+        } else if (shuffledMoves.includes('RIGHT')) {
+          newCol = blinkyPosition.col + 1;
+        }
+        if (shuffledMoves.includes('UP')) {
+          newRow = blinkyPosition.row - 1;
+        } else if (shuffledMoves.includes('DOWN')) {
+          newRow = blinkyPosition.row + 1;
+        }
+  
+        // Update blinky's position if it can move in any direction
+        if (newRow !== blinkyPosition.row || newCol !== blinkyPosition.col) {
+          updateBlinkyPosition(newRow, newCol);
+        }
       }
     }
   
@@ -234,6 +270,9 @@ const updateBlinkyPosition = (row, col) => {
     newBoardData[row][col] = 'G1';
     setBoardData(newBoardData);
     setBlinkyPosition({ row, col });
+
+    console.log(`Blinky is at row: ${row}, col: ${col}`);
+
   } else {
     const rowDiff = row - blinkyPosition.row;
     const colDiff = col - blinkyPosition.col;
@@ -245,10 +284,17 @@ const updateBlinkyPosition = (row, col) => {
       newBoardData[nextRow][nextCol] = 'U'; // makes the power-up remain in the cell after Blinky passes over it
       setBoardData(newBoardData);
       setBlinkyPosition({ row: nextRow, col: nextCol });
+
+      console.log(`Blinky is at row: ${nextRow}, col: ${nextCol}`);
+
+
     } else {
       newBoardData[blinkyPosition.row][blinkyPosition.col] = 'U';
       setBoardData(newBoardData);
       setBlinkyPosition({ row, col });
+
+      console.log(`Blinky is at row: ${nextRow}, col: ${nextCol}`);
+
     }
   }
 };
