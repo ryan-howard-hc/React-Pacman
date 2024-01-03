@@ -36,6 +36,7 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
         return;
     }
 
+    if (!(newRow === 12 && newCol === 13)) {
 
     if (boardData[newRow] && boardData[newRow][newCol] !== 'X') {
       const newBoardData = [...boardData];
@@ -44,7 +45,7 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
       setBoardData(newBoardData);
       setPacmanPosition({ row: newRow, col: newCol });
 
-    }
+    }}
     handleKeyPress();
     console.log(`Pac-Man is at row: ${newRow}, col: ${newCol}`);
 

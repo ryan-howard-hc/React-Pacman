@@ -181,7 +181,7 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
         newRow < boardData.length &&
         newCol >= 0 &&
         newCol < boardData[0].length &&
-        boardData[newRow][newCol] === '.'
+        (boardData[newRow][newCol] === '.' || boardData[newRow][newCol] === 'C')
       ) {
         updateBlinkyPosition(newRow, newCol);
       }
@@ -195,16 +195,16 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
       // checksk if there's a current direction
       if (currentDirection) {
         // Continue moving in the current direction if possible
-        if (currentDirection === 'left' && newCol > 0 && boardData[newRow][newCol - 1] === '.') {
+        if (currentDirection === 'left' && newCol > 0 && (boardData[newRow][newCol - 1] === '.' || boardData[newRow][newCol - 1] === 'C')) {
           newCol -= 1;
           moveMade = true;
-        } else if (currentDirection === 'right' && newCol < boardData[0].length - 1 && boardData[newRow][newCol + 1] === '.') {
+        } else if (currentDirection === 'right' && newCol < boardData[0].length - 1 && (boardData[newRow][newCol + 1] === '.' || boardData[newRow][newCol + 1] === 'C')) {
           newCol += 1;
           moveMade = true;
-        } else if (currentDirection === 'up' && newRow > 0 && boardData[newRow - 1][newCol] === '.') {
+        } else if (currentDirection === 'up' && newRow > 0 && (boardData[newRow - 1][newCol] === '.' || boardData[newRow - 1][newCol] === 'C')) {
           newRow -= 1;
           moveMade = true;
-        } else if (currentDirection === 'down' && newRow < boardData.length - 1 && boardData[newRow + 1][newCol] === '.') {
+        } else if (currentDirection === 'down' && newRow < boardData.length - 1 && (boardData[newRow + 1][newCol] === '.' || boardData[newRow + 1][newCol] === 'C')) {
           newRow += 1;
           moveMade = true;
         }
@@ -296,7 +296,7 @@ const updateBlinkyPosition = (row, col) => {
   const cellValue = newBoardData[row][col];
 
   if (cellValue !== 'U') {
-    newBoardData[blinkyPosition.row][blinkyPosition.col] = '.';
+    newBoardData[blinkyPosition.row][blinkyPosition.col] = cellValue === '.' ? 'C' : cellValue;
     newBoardData[row][col] = 'G1';
     setBoardData(newBoardData);
     setBlinkyPosition({ row, col });
