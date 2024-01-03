@@ -9,22 +9,22 @@ const GamePage = () => {
     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
     ['X', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'X', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'X'],
     ['X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X'],
-    ['X', 'U', 'X', 'C', 'C', 'X', 'C', 'X', 'C', 'C', 'C', 'X', 'C', 'X', 'C', 'X', 'C', 'C', 'C', 'X', 'C', 'X', 'C', 'C', 'X', 'U', 'X'],
+    ['X', 'U', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'U', 'X'],
     ['X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X'],
     ['X', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'X'],
     ['X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X'],
     ['X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X'],
     ['X', 'C', 'C', 'C', 'C', 'C', 'C', 'X', 'X', 'C', 'C', 'C', 'X', 'X', 'X', 'C', 'C', 'C', 'X', 'X', 'C', 'C', 'C', 'C', 'C', 'C', 'X'],
     ['X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X'],
-    ['X', 'C', 'C', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'C', 'C', 'X'],
-    ['X', 'C', 'C', 'C', 'X', 'X', 'C', 'X', 'X', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'X', 'X', 'C', 'X', 'X', 'C', 'C', 'C', 'X'],
-    ['X', 'C', 'C', 'C', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', '.', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'C', 'C', 'C', 'X'],
+    ['X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X'],
+    ['X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X'],
+    ['X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', '.', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X'],
     ['X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', '.', '.', '.', '.', '.', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X'],
     ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'X', 'G1', 'G2', '.', 'G3', 'G4', 'X', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'],
     ['X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', '.', '.', '.', '.', '.', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X'],
-    ['X', 'C', 'C', 'C', 'X', 'X', 'C', 'X', 'X', 'C', 'X', '.', '.', '.', '.', '.', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'C', 'C', 'C', 'X'],
-    ['X', 'C', 'C', 'C', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'C', 'C', 'C', 'X'],
-    ['X', 'C', 'C', 'C', 'X', 'X', 'C', 'X', 'X', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'X', 'X', 'C', 'X', 'X', 'C', 'C', 'C', 'X'],
+    ['X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', '.', '.', '.', '.', '.', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X'],
+    ['X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X'],
+    ['X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X'],
     ['X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'X', 'X'],
     ['X', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'X', 'X', 'X', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'X'],
     ['X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X', 'X', 'X', 'X', 'C', 'X'],
@@ -43,6 +43,7 @@ const GamePage = () => {
   const [pacmanPosition, setPacmanPosition] = useState({ row: 23, col: 13 });
   const [keyPressCount, setKeyPressCount] = useState(0);
   const [visitedSquares, setVisitedSquares] = useState(new Set());
+  const [collectedCoins, setCollectedCoins] = useState(0);
 
   const handleKeyPress = () => {
     // Update key press count
@@ -56,6 +57,7 @@ const GamePage = () => {
     <div className="game-container">
       <h1>Pac-Man Game</h1>
       <p>Key Press Count: {keyPressCount}</p>
+      <p>Collected Coins: {collectedCoins}</p>
       <Pac boardData={boardData} />
 
       <PacMan
@@ -65,7 +67,8 @@ const GamePage = () => {
         setPacmanPosition={setPacmanPosition}
         setBoardData={setBoardData}
         handleKeyPress={handleKeyPress}
-
+        // collectedCoins={collectedCoins} 
+        setCollectedCoins={setCollectedCoins} 
       />
       <Blinky
         boardData={boardData}

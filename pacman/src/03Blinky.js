@@ -296,12 +296,12 @@ const updateBlinkyPosition = (row, col) => {
   const cellValue = newBoardData[row][col];
 
   if (cellValue !== 'U') {
-    newBoardData[blinkyPosition.row][blinkyPosition.col] = cellValue === '.' ? 'C' : cellValue;
+    const originalCellValue = cellValue === 'C' || cellValue === '.' ? cellValue : 'G1';
+    newBoardData[blinkyPosition.row][blinkyPosition.col] = originalCellValue;
     newBoardData[row][col] = 'G1';
     setBoardData(newBoardData);
     setBlinkyPosition({ row, col });
     console.log(`Blinky is at row: ${row}, col: ${col}`);
-
   } else {
     const rowDiff = row - blinkyPosition.row;
     const colDiff = col - blinkyPosition.col;
