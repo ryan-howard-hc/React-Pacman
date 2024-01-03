@@ -11,6 +11,31 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
   const [currentDirection, setCurrentDirection] = useState(''); //new state variable to store the current direction for movealongsequence
 
   const [pacmanMovementCount, setPacmanMovementCount] = useState(0);
+
+  const [isRunning, setIsRunning] = useState(false);
+  const [runAwayPath, setRunAwayPath] = useState([]);
+
+  const detectCollision = (pacmanPos, blinkyPos) => {
+    return pacmanPos.row === blinkyPos.row && pacmanPos.col === blinkyPos.col;
+  };
+  
+  const handleCollision = () => {
+    const isCaught = detectCollision(pacmanPosition, blinkyPosition);
+  
+    if (isCaught && isRunning) {
+      console.log('BLINKY HAS BEEN CAUGHT');
+
+      resetBlinkyPosition();
+    }
+  };
+
+  const resetBlinkyPosition = () => {
+    setBlinkyPosition({ row: 14, col: 11 });
+  };
+  
+
+
+
   useEffect(() => {
     setPacmanMovementCount(Math.floor(keyPressCount / 2)); // Assuming Pac-Man moves twice per key press
   }, [keyPressCount]);
@@ -146,6 +171,9 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
       } else if (blinkyMoveCount === 4 || blinkyMoveCount === 5) {
         newRow = blinkyPosition.row - 1;
         newCol = blinkyPosition.col;
+      } else if (blinkyMoveCount === 5|| blinkyMoveCount === 6) {
+        newRow = blinkyPosition.row ;
+        newCol = blinkyPosition.col - 1;
       } 
   
       if (
@@ -219,6 +247,7 @@ const moveBlinkyTowardsPacman = () => {
   }
 
   if (useBlinkyRuns && keyPressesAfterTrigger < 30) {
+    setIsRunning(true);
     if (keyPressesAfterTrigger % 2 === 0) {
       const pathNode = blinkyRuns(blinkyPosition, pacmanPosition);
       
@@ -241,6 +270,7 @@ const moveBlinkyTowardsPacman = () => {
 
     setKeyPressesAfterTrigger(prevCount => prevCount + 1);
   } else {
+    setIsRunning(false);
     const pathNode = blinkysShortestPath(blinkyPosition, pacmanPosition);
 
     if (pathNode) {
@@ -303,6 +333,7 @@ useEffect(() => {
   } else {
     moveBlinkyTowardsPacman();
   }
+  handleCollision()
 }, [keyPressCount, pacmanPosition]);
 
   
