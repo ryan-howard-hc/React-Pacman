@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, handleKeyPress, blinkyPosition }) => {
-  
+const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, handleKeyPress, setCollectedCoins }) => {
+
+
+
+
   const handleKeyDown = (event) => {
     const { key } = event;
     const { row, col } = pacmanPosition;
@@ -35,7 +38,17 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
       default:
         return;
     }
+    if (boardData[newRow] && boardData[newRow][newCol] === 'C') {
+      setCollectedCoins(prevCoins => {
+        console.log(`Coin collected! Total coins: ${prevCoins + 1}`); // Log coin collection
+        return prevCoins + 1;
+      });
+      const newBoardData = [...boardData];
+      newBoardData[newRow][newCol] = '.';
+      setBoardData(newBoardData);
+    }
 
+    if (!(newRow === 12 && newCol === 13)) {
 
     if (boardData[newRow] && boardData[newRow][newCol] !== 'X') {
       const newBoardData = [...boardData];
@@ -44,7 +57,7 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
       setBoardData(newBoardData);
       setPacmanPosition({ row: newRow, col: newCol });
 
-    }
+    }}
     handleKeyPress();
     console.log(`Pac-Man is at row: ${newRow}, col: ${newCol}`);
 
@@ -62,6 +75,9 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
 
 
   return null; 
+
+  
 };
+
 
 export default PacMan;
