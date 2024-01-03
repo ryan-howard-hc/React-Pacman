@@ -42,7 +42,6 @@ const GamePage = () => {
   const [boardData, setBoardData] = useState(initialBoardData);
   const [pacmanPosition, setPacmanPosition] = useState({ row: 23, col: 13 });
   const [keyPressCount, setKeyPressCount] = useState(0);
-  const [visitedSquares, setVisitedSquares] = useState(new Set());
   const [collectedCoins, setCollectedCoins] = useState(0);
 
   const handleKeyPress = () => {
