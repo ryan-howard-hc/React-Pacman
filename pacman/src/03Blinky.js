@@ -342,10 +342,10 @@ useEffect(() => {
   return (
     <div className="blinky-container">
       {/* <img
-        src='../src/images/ghost.png'
+        src={require('../src/images/blinky.png')}
         alt="Blinky"
-        style={{ position: 'absolute', top: `${blinkyPosition.row * 20}px`, left: `${blinkyPosition.col * 20}px` }}
-      /> */}
+        style={{ position: 'absolute', top: `${(blinkyPosition.row * 20) + 325}px`, left: `${(blinkyPosition.col * 20)+145}px` }}
+        /> */}
     </div>
   );
 };
