@@ -1,4 +1,5 @@
 import React from 'react';
+import ghost from '../src/images/ghost.png';
 
 const Pac = ({ boardData }) => {
   return (
@@ -26,7 +27,7 @@ function getCellClass(cellValue) {
       return 'bg-yellow-400'; 
     // ghostgang
     case 'G1':
-      return 'bg-red-500'; // blinky
+      return <img src={ghost} alt="Blinky" className="bg-red-500 w-full h-full" />;      // blinky
     case 'G2':
       return 'bg-blue-500'; // inky
     case 'G3':

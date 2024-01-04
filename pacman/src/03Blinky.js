@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../src/images/ghost.png';
 
 //gotta make sure to call pacmanPosition 
 const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
@@ -340,7 +341,11 @@ useEffect(() => {
 
   return (
     <div className="blinky-container">
-        {/* nlinky image when i want to add it */}
+      {/* <img
+        src='../src/images/ghost.png'
+        alt="Blinky"
+        style={{ position: 'absolute', top: `${blinkyPosition.row * 20}px`, left: `${blinkyPosition.col * 20}px` }}
+      /> */}
     </div>
   );
 };
