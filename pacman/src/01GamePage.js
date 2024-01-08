@@ -56,7 +56,7 @@ const GamePage = () => {
     <div className="game-container">
       <h1>Pac-Man Game</h1>
       <p>Key Press Count: {keyPressCount}</p>
-      <p>Collected Coins: {collectedCoins}</p>
+      <p>Points: {collectedCoins}</p>
       <Pac boardData={boardData} />
 
       <PacMan
@@ -74,6 +74,7 @@ const GamePage = () => {
         initialBoardData={initialBoardData}
         pacmanPosition={pacmanPosition}
         keyPressCount={keyPressCount}
+        setCollectedCoins={setCollectedCoins} 
 
       />
     </div>
