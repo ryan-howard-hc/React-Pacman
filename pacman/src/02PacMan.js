@@ -40,12 +40,16 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
     }
     if (boardData[newRow] && boardData[newRow][newCol] === 'C') {
       setCollectedCoins(prevCoins => {
-        console.log(`Coin collected! Total coins: ${prevCoins + 1}`); // Log coin collection
-        return prevCoins + 1;
+        console.log(`Total coins: ${prevCoins + 1}`); 
+        return prevCoins + 10;
       });
       const newBoardData = [...boardData];
       newBoardData[newRow][newCol] = '.';
       setBoardData(newBoardData);
+    }
+
+    if (boardData[newRow] && boardData[newRow][newCol] === 'U') {
+      setCollectedCoins(prevCoins => prevCoins + 50);
     }
 
     if (!(newRow === 12 && newCol === 13)) {
