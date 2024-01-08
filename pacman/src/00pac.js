@@ -9,11 +9,12 @@ import dot from '../src/images/dot.png';
 
 const Pac = ({ boardData }) => {
   return (
-    <div className="grid grid-cols-30 gap-1">
+    <div className="flex justify-center mt-2">
+    <div className="grid grid-cols-30 gap-0 ">
       {boardData.map((row, rowIndex) => (
         <div key={rowIndex} className="flex">
           {row.map((cell, columnIndex) => (
-            <div key={`${rowIndex}-${columnIndex}`} className={`w-8 h-8 border border-gray-300 ${getCellClass(cell)}`}>
+            <div key={`${rowIndex}-${columnIndex}`} className={`w-6 h-6 border border-gray-300 ${getCellClass(cell)}`}>
               {cell === 'G1' && (
                 <img
                   src={blinky} 
@@ -68,6 +69,7 @@ const Pac = ({ boardData }) => {
           ))}
         </div>
       ))}
+    </div>
     </div>
   );
 };

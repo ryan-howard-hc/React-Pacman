@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../src/images/ghost.png';
 
 //gotta make sure to call pacmanPosition 
-const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
+const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount, setCollectedCoins }) => {
   const [boardData, setBoardData] = useState(initialBoardData);
   const [blinkyPosition, setBlinkyPosition] = useState({ row:14, col: 11 });
   const [useBlinkyRuns, setUseBlinkyRuns] = useState(false);
@@ -25,6 +25,7 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount }) => {
   
     if (isCaught && isRunning) {
       console.log('BLINKY HAS BEEN CAUGHT');
+      setCollectedCoins(prevCoins => prevCoins + 200);
 
       resetBlinkyPosition();
     }
@@ -247,7 +248,7 @@ const moveBlinkyTowardsPacman = () => {
     setKeyPressesAfterTrigger(0);
   }
 
-  if (useBlinkyRuns && keyPressesAfterTrigger < 30) {
+  if (useBlinkyRuns && keyPressesAfterTrigger < 50) {
     setIsRunning(true);
     if (keyPressesAfterTrigger % 2 === 0) {
       const pathNode = blinkyRuns(blinkyPosition, pacmanPosition);
