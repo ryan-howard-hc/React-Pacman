@@ -13,6 +13,8 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount, setCollectedC
 
   const [pacmanMovementCount, setPacmanMovementCount] = useState(0);
 
+  const [caughtBlinky, setCaughtBlinky] = useState(false);      //variable to capture/identify whether blinky has been caught so I can reset movep attern 
+  const [catchCount, setCatchCount] = useState(0);            // counts number of steps based on current count so it can reset without resetting counter
   const [isRunning, setIsRunning] = useState(false);
   const [runAwayPath, setRunAwayPath] = useState([]);
 
@@ -26,7 +28,8 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount, setCollectedC
     if (isCaught && isRunning) {
       console.log('BLINKY HAS BEEN CAUGHT');
       setCollectedCoins(prevCoins => prevCoins + 200);
-
+      setCaughtBlinky(true); // Set Blinky as caught
+      setCatchCount(0);
       resetBlinkyPosition();
     }
   };
@@ -330,13 +333,22 @@ const updateBlinkyPosition = (row, col) => {
 
 
 useEffect(() => {
-  if (keyPressCount < 50) {
-    moveAlongSequence();
+  if (caughtBlinky) {
+    if (catchCount < 20) { // Change 20 to the number of key presses you want
+      moveAlongSequence();
+      setCatchCount(prevCount => prevCount + 1);
+    } else {
+      setCaughtBlinky(false); // Reset the flag after desired key presses
+    }
   } else {
-    moveBlinkyTowardsPacman();
+    if (keyPressCount < 50) {
+      moveAlongSequence();
+    } else {
+      moveBlinkyTowardsPacman();
+    }
   }
-  handleCollision()
-}, [keyPressCount, pacmanPosition]);
+  handleCollision();
+}, [keyPressCount, pacmanPosition, caughtBlinky, catchCount]);
 
   
 

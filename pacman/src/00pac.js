@@ -26,7 +26,7 @@ const Pac = ({ boardData }) => {
                 <img
                   src={pinky} 
                   alt="pinky"
-                  className="w-full h-full" 
+                  className="w-full h-full flex justify-center items-center" 
                 />
               )}
                                           {cell === 'G2' && (

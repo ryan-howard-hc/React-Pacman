@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Pac from './00pac.js';
 import PacMan from './02PacMan.js';
 import Blinky from './03Blinky.js';
-
+import Pinky from './04Pinky.js';
 const GamePage = () => {
   // boardData is a 2D array representing the game board
   const initialBoardData  = [
@@ -77,6 +77,14 @@ const GamePage = () => {
         setCollectedCoins={setCollectedCoins} 
 
       />
+            {/* <Pinky
+        boardData={boardData}
+        initialBoardData={initialBoardData}
+        pacmanPosition={pacmanPosition}
+        keyPressCount={keyPressCount}
+        setCollectedCoins={setCollectedCoins} 
+        pacmanDirection={pacmanDirection}
+      /> */}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, handleKeyPress, setCollectedCoins }) => {
-
+  const [pacmanDirection, setPacmanDirection] = useState(''); //for pinky's predictive movement captures
 
 
 
@@ -15,9 +15,13 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
     switch (key) {
       case 'ArrowUp':
         newRow = row - 1;
+        setPacmanDirection('up');
+
         break;
       case 'ArrowDown':
         newRow = row + 1;
+        setPacmanDirection('down');
+
         break;
       case 'ArrowLeft':
         //checks if pacman is in the first column and moving left
@@ -26,6 +30,8 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
         } else {
           newCol = col - 1;
         }
+        setPacmanDirection('left');
+
         break;
       case 'ArrowRight':
         //checks if pacman is in the last column and moving right
@@ -34,6 +40,8 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
         } else {
           newCol = col + 1;
         }
+        setPacmanDirection('right');
+
         break;
       default:
         return;
@@ -75,7 +83,7 @@ const PacMan = ({ boardData, pacmanPosition, setPacmanPosition, setBoardData, ha
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [boardData, pacmanPosition, setPacmanPosition, setBoardData, handleKeyPress]);
+  }, [boardData, pacmanPosition, setPacmanPosition, setBoardData, handleKeyPress, pacmanDirection]);
 
 
   return null; 
