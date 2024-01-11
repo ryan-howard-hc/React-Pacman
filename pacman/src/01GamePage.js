@@ -75,6 +75,7 @@ const GamePage = () => {
         pacmanPosition={pacmanPosition}
         keyPressCount={keyPressCount}
         setCollectedCoins={setCollectedCoins} 
+        setPacmanPosition={setPacmanPosition}
 
       />
             {/* <Pinky

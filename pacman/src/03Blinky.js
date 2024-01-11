@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../src/images/ghost.png';
 
 //gotta make sure to call pacmanPosition 
-const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount, setCollectedCoins }) => {
+const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount, setCollectedCoins, setPacmanPosition }) => {
   const [boardData, setBoardData] = useState(initialBoardData);
   const [blinkyPosition, setBlinkyPosition] = useState({ row:14, col: 11 });
   const [useBlinkyRuns, setUseBlinkyRuns] = useState(false);
@@ -22,17 +22,32 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount, setCollectedC
     return pacmanPos.row === blinkyPos.row && pacmanPos.col === blinkyPos.col;
   };
   
-  const handleCollision = () => {
-    const isCaught = detectCollision(pacmanPosition, blinkyPosition);
-  
-    if (isCaught && isRunning) {
-      console.log('BLINKY HAS BEEN CAUGHT');
-      setCollectedCoins(prevCoins => prevCoins + 200);
-      setCaughtBlinky(true); // Set Blinky as caught
-      setCatchCount(0);
-      resetBlinkyPosition();
-    }
-  };
+const handleCollision = () => {
+  const isCaught = detectCollision(pacmanPosition, blinkyPosition);
+
+  if (isCaught && !isRunning) {
+    console.log('PACMAN COLLIDED WITH BLINKY');
+    // Reset Pac-Man and Blinky to starting positions
+    setPacmanPosition({ row: 23, col: 13 });
+    resetBlinkyPosition();
+    resetCollidedSquare();
+  }
+
+  if (isCaught && isRunning) {
+    console.log('BLINKY HAS BEEN CAUGHT');
+    setCollectedCoins(prevCoins => prevCoins + 200);
+    setCaughtBlinky(true);
+    setCatchCount(0);
+    resetBlinkyPosition();
+  }
+};
+
+const resetCollidedSquare = () => {
+  const { row, col } = blinkyPosition;
+  const newBoardData = [...boardData];
+  newBoardData[row][col] = '.';
+  setBoardData(newBoardData);
+};
 
   const resetBlinkyPosition = () => {
     setBlinkyPosition({ row: 14, col: 11 });
@@ -330,6 +345,10 @@ const updateBlinkyPosition = (row, col) => {
   }
 };
 
+// const updateBlinkyPosition = (row, col) => {
+//   setBlinkyPosition({ row, col });
+//   console.log(`Blinky is at row: ${row}, col: ${col}`);
+// };
 
 
 useEffect(() => {
@@ -354,11 +373,7 @@ useEffect(() => {
 
   return (
     <div className="blinky-container">
-      {/* <img
-        src={require('../src/images/blinky.png')}
-        alt="Blinky"
-        style={{ position: 'absolute', top: `${(blinkyPosition.row * 20) + 325}px`, left: `${(blinkyPosition.col * 20)+145}px` }}
-        /> */}
+
     </div>
   );
 };
