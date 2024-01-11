@@ -311,6 +311,11 @@ const moveBlinkyTowardsPacman = () => {
   }
 };
 
+const moveBlinkyVisual = (row, col) => {
+  // Move Blinky visually without affecting the board data??????????????????????
+  console.log(`Blinky is at row: ${row}, col: ${col}`);
+};
+
 const updateBlinkyPosition = (row, col) => {
   const newBoardData = [...boardData];
   const cellValue = newBoardData[row][col];
@@ -321,27 +326,12 @@ const updateBlinkyPosition = (row, col) => {
     newBoardData[row][col] = 'G1';
     setBoardData(newBoardData);
     setBlinkyPosition({ row, col });
-    console.log(`Blinky is at row: ${row}, col: ${col}`);
+    moveBlinkyVisual(row, col); 
   } else {
-    const rowDiff = row - blinkyPosition.row;
-    const colDiff = col - blinkyPosition.col;
-    const nextRow = row + rowDiff;
-    const nextCol = col + colDiff;
-
-    if (newBoardData[nextRow]?.[nextCol] !== undefined) {
-      newBoardData[blinkyPosition.row][blinkyPosition.col] = '.';
-      newBoardData[nextRow][nextCol] = 'U'; // makes the power-up remain in the cell after Blinky passes over it
-      setBoardData(newBoardData);
-      setBlinkyPosition({ row: nextRow, col: nextCol });
-      console.log(`Blinky is at row: ${nextRow}, col: ${nextCol}`);
-
-    } else {
-      newBoardData[blinkyPosition.row][blinkyPosition.col] = 'U';
-      setBoardData(newBoardData);
-      setBlinkyPosition({ row, col });
-      console.log(`Blinky is at row: ${row}, col: ${col}`);
-
-    }
+    newBoardData[blinkyPosition.row][blinkyPosition.col] = 'U';
+    setBoardData(newBoardData);
+    setBlinkyPosition({ row, col });
+    moveBlinkyVisual(row, col);
   }
 };
 
@@ -353,11 +343,11 @@ const updateBlinkyPosition = (row, col) => {
 
 useEffect(() => {
   if (caughtBlinky) {
-    if (catchCount < 20) { // Change 20 to the number of key presses you want
+    if (catchCount < 20) { 
       moveAlongSequence();
       setCatchCount(prevCount => prevCount + 1);
     } else {
-      setCaughtBlinky(false); // Reset the flag after desired key presses
+      setCaughtBlinky(false); 
     }
   } else {
     if (keyPressCount < 50) {
