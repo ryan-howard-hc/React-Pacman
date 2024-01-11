@@ -30,39 +30,39 @@ const Pinky = ({ initialBoardData, pacmanPosition, keyPressCount, setCollectedCo
       };
 
 
-      const updatePinkyPosition = (row, col) => {               //REUSABLE
-        const newBoardData = [...boardData];
-        const cellValue = newBoardData[row][col];
+      // const updatePinkyPosition = (row, col) => {               //REUSABLE
+      //   const newBoardData = [...boardData];
+      //   const cellValue = newBoardData[row][col];
       
-        if (cellValue !== 'U') {
-          const originalCellValue = cellValue === 'C' || cellValue === '.' ? cellValue : 'G1';
-          newBoardData[pinkyPosition.row][pinkyPosition.col] = originalCellValue;
-          newBoardData[row][col] = 'G1';
-          setBoardData(newBoardData);
-          setPinkyPosition({ row, col });
-          console.log(`Pinky is at row: ${row}, col: ${col}`);
-        } else {
-          const rowDiff = row - pinkyPosition.row;
-          const colDiff = col - pinkyPosition.col;
-          const nextRow = row + rowDiff;
-          const nextCol = col + colDiff;
+      //   if (cellValue !== 'U') {
+      //     const originalCellValue = cellValue === 'C' || cellValue === '.' ? cellValue : 'G1';
+      //     newBoardData[pinkyPosition.row][pinkyPosition.col] = originalCellValue;
+      //     newBoardData[row][col] = 'G1';
+      //     setBoardData(newBoardData);
+      //     setPinkyPosition({ row, col });
+      //     console.log(`Pinky is at row: ${row}, col: ${col}`);
+      //   } else {
+      //     const rowDiff = row - pinkyPosition.row;
+      //     const colDiff = col - pinkyPosition.col;
+      //     const nextRow = row + rowDiff;
+      //     const nextCol = col + colDiff;
       
-          if (newBoardData[nextRow]?.[nextCol] !== undefined) {
-            newBoardData[pinkyPosition.row][pinkyPosition.col] = '.';
-            newBoardData[nextRow][nextCol] = 'U'; // makes the power-up remain in the cell after Pinky passes over it
-            setBoardData(newBoardData);
-            setPinkyPosition({ row: nextRow, col: nextCol });
-            console.log(`Pinky is at row: ${nextRow}, col: ${nextCol}`);
+      //     if (newBoardData[nextRow]?.[nextCol] !== undefined) {
+      //       newBoardData[pinkyPosition.row][pinkyPosition.col] = '.';
+      //       newBoardData[nextRow][nextCol] = 'U'; // makes the power-up remain in the cell after Pinky passes over it
+      //       setBoardData(newBoardData);
+      //       setPinkyPosition({ row: nextRow, col: nextCol });
+      //       console.log(`Pinky is at row: ${nextRow}, col: ${nextCol}`);
       
-          } else {
-            newBoardData[pinkyPosition.row][pinkyPosition.col] = 'U';
-            setBoardData(newBoardData);
-            setPinkyPosition({ row, col });
-            console.log(`Pinky is at row: ${row}, col: ${col}`);
+      //     } else {
+      //       newBoardData[pinkyPosition.row][pinkyPosition.col] = 'U';
+      //       setBoardData(newBoardData);
+      //       setPinkyPosition({ row, col });
+      //       console.log(`Pinky is at row: ${row}, col: ${col}`);
       
-          }
-        }
-      };
+      //     }
+      //   }
+      // };
 
 
       // const pinkyRuns = (start, target) => {                    //REUSABLE WITH MODIFICATIONS 
