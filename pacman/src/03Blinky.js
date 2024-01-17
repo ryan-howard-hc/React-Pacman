@@ -320,20 +320,40 @@ const updateBlinkyPosition = (row, col) => {
   const newBoardData = [...boardData];
   const cellValue = newBoardData[row][col];
 
-  if (cellValue !== 'U') {
-    const originalCellValue = cellValue === 'C' || cellValue === '.' ? cellValue : 'G1';
-    newBoardData[blinkyPosition.row][blinkyPosition.col] = originalCellValue;
+  if (cellValue === 'C') {
+    // Blinky moves over 'C' block without changing anything??????????????
+    newBoardData[blinkyPosition.row][blinkyPosition.col] = 'C'; 
+    newBoardData[row][col] = 'G1'; 
+    setBoardData(newBoardData);
+
+    setBlinkyPosition({ row, col });
+    moveBlinkyVisual(row, col);
+  } else if (cellValue === '.') {
+    newBoardData[blinkyPosition.row][blinkyPosition.col] = '.'; 
     newBoardData[row][col] = 'G1';
     setBoardData(newBoardData);
     setBlinkyPosition({ row, col });
-    moveBlinkyVisual(row, col); 
-  } else {
+    moveBlinkyVisual(row, col);
+  } else if (cellValue === 'U') {
     newBoardData[blinkyPosition.row][blinkyPosition.col] = 'U';
+    newBoardData[row][col] = 'G1'; 
+    setBoardData(newBoardData);
+
+    setBlinkyPosition({ row, col });
+    moveBlinkyVisual(row, col);
+  } else if (cellValue === 'G2' || cellValue === 'G3' || cellValue === 'G4') {
+    // Blinky moves through G2, G3, or G4 without altering them??????????
+    newBoardData[row][col] = 'G1';
     setBoardData(newBoardData);
     setBlinkyPosition({ row, col });
     moveBlinkyVisual(row, col);
   }
 };
+
+
+
+
+
 
 // const updateBlinkyPosition = (row, col) => {
 //   setBlinkyPosition({ row, col });

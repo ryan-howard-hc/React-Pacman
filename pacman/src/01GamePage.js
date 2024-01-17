@@ -69,6 +69,7 @@ const GamePage = () => {
         // collectedCoins={collectedCoins} 
         setCollectedCoins={setCollectedCoins} 
       />
+      
       <Blinky
         boardData={boardData}
         initialBoardData={initialBoardData}
