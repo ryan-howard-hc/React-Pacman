@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../src/images/ghost.png';
 
 //gotta make sure to call pacmanPosition 
-const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount, setCollectedCoins }) => {
+const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount, setCollectedCoins, setPacmanPosition }) => {
   const [boardData, setBoardData] = useState(initialBoardData);
   const [blinkyPosition, setBlinkyPosition] = useState({ row:14, col: 11 });
   const [useBlinkyRuns, setUseBlinkyRuns] = useState(false);
@@ -22,17 +22,32 @@ const Blinky = ({ initialBoardData, pacmanPosition, keyPressCount, setCollectedC
     return pacmanPos.row === blinkyPos.row && pacmanPos.col === blinkyPos.col;
   };
   
-  const handleCollision = () => {
-    const isCaught = detectCollision(pacmanPosition, blinkyPosition);
-  
-    if (isCaught && isRunning) {
-      console.log('BLINKY HAS BEEN CAUGHT');
-      setCollectedCoins(prevCoins => prevCoins + 200);
-      setCaughtBlinky(true); // Set Blinky as caught
-      setCatchCount(0);
-      resetBlinkyPosition();
-    }
-  };
+const handleCollision = () => {
+  const isCaught = detectCollision(pacmanPosition, blinkyPosition);
+
+  if (isCaught && !isRunning) {
+    console.log('PACMAN COLLIDED WITH BLINKY');
+    // Reset Pac-Man and Blinky to starting positions
+    setPacmanPosition({ row: 23, col: 13 });
+    resetBlinkyPosition();
+    resetCollidedSquare();
+  }
+
+  if (isCaught && isRunning) {
+    console.log('BLINKY HAS BEEN CAUGHT');
+    setCollectedCoins(prevCoins => prevCoins + 200);
+    setCaughtBlinky(true);
+    setCatchCount(0);
+    resetBlinkyPosition();
+  }
+};
+
+const resetCollidedSquare = () => {
+  const { row, col } = blinkyPosition;
+  const newBoardData = [...boardData];
+  newBoardData[row][col] = '.';
+  setBoardData(newBoardData);
+};
 
   const resetBlinkyPosition = () => {
     setBlinkyPosition({ row: 14, col: 11 });
@@ -296,49 +311,63 @@ const moveBlinkyTowardsPacman = () => {
   }
 };
 
+const moveBlinkyVisual = (row, col) => {
+  // Move Blinky visually without affecting the board data??????????????????????
+  console.log(`Blinky is at row: ${row}, col: ${col}`);
+};
+
 const updateBlinkyPosition = (row, col) => {
   const newBoardData = [...boardData];
   const cellValue = newBoardData[row][col];
 
-  if (cellValue !== 'U') {
-    const originalCellValue = cellValue === 'C' || cellValue === '.' ? cellValue : 'G1';
-    newBoardData[blinkyPosition.row][blinkyPosition.col] = originalCellValue;
+  if (cellValue === 'C') {
+    // Blinky moves over 'C' block without changing anything??????????????
+    newBoardData[blinkyPosition.row][blinkyPosition.col] = 'C'; 
+    newBoardData[row][col] = 'G1'; 
+    setBoardData(newBoardData);
+
+    setBlinkyPosition({ row, col });
+    moveBlinkyVisual(row, col);
+  } else if (cellValue === '.') {
+    newBoardData[blinkyPosition.row][blinkyPosition.col] = '.'; 
     newBoardData[row][col] = 'G1';
     setBoardData(newBoardData);
     setBlinkyPosition({ row, col });
-    console.log(`Blinky is at row: ${row}, col: ${col}`);
-  } else {
-    const rowDiff = row - blinkyPosition.row;
-    const colDiff = col - blinkyPosition.col;
-    const nextRow = row + rowDiff;
-    const nextCol = col + colDiff;
+    moveBlinkyVisual(row, col);
+  } else if (cellValue === 'U') {
+    newBoardData[blinkyPosition.row][blinkyPosition.col] = 'U';
+    newBoardData[row][col] = 'G1'; 
+    setBoardData(newBoardData);
 
-    if (newBoardData[nextRow]?.[nextCol] !== undefined) {
-      newBoardData[blinkyPosition.row][blinkyPosition.col] = '.';
-      newBoardData[nextRow][nextCol] = 'U'; // makes the power-up remain in the cell after Blinky passes over it
-      setBoardData(newBoardData);
-      setBlinkyPosition({ row: nextRow, col: nextCol });
-      console.log(`Blinky is at row: ${nextRow}, col: ${nextCol}`);
-
-    } else {
-      newBoardData[blinkyPosition.row][blinkyPosition.col] = 'U';
-      setBoardData(newBoardData);
-      setBlinkyPosition({ row, col });
-      console.log(`Blinky is at row: ${row}, col: ${col}`);
-
-    }
+    setBlinkyPosition({ row, col });
+    moveBlinkyVisual(row, col);
+  } else if (cellValue === 'G2' || cellValue === 'G3' || cellValue === 'G4') {
+    // Blinky moves through G2, G3, or G4 without altering them??????????
+    newBoardData[row][col] = 'G1';
+    setBoardData(newBoardData);
+    setBlinkyPosition({ row, col });
+    moveBlinkyVisual(row, col);
   }
 };
 
 
 
+
+
+
+// const updateBlinkyPosition = (row, col) => {
+//   setBlinkyPosition({ row, col });
+//   console.log(`Blinky is at row: ${row}, col: ${col}`);
+// };
+
+
 useEffect(() => {
   if (caughtBlinky) {
-    if (catchCount < 20) { // Change 20 to the number of key presses you want
+    if (catchCount < 20) { 
       moveAlongSequence();
       setCatchCount(prevCount => prevCount + 1);
     } else {
-      setCaughtBlinky(false); // Reset the flag after desired key presses
+      setCaughtBlinky(false); 
     }
   } else {
     if (keyPressCount < 50) {
@@ -354,11 +383,7 @@ useEffect(() => {
 
   return (
     <div className="blinky-container">
-      {/* <img
-        src={require('../src/images/blinky.png')}
-        alt="Blinky"
-        style={{ position: 'absolute', top: `${(blinkyPosition.row * 20) + 325}px`, left: `${(blinkyPosition.col * 20)+145}px` }}
-        /> */}
+
     </div>
   );
 };

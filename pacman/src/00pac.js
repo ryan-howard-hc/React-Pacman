@@ -19,14 +19,14 @@ const Pac = ({ boardData }) => {
                 <img
                   src={blinky} 
                   alt="Blinky"
-                  className="w-full h-full flex justify-center items-center" 
+                  className="w-full h-full"
                 />
               )}
                             {cell === 'G3' && (
                 <img
                   src={pinky} 
                   alt="pinky"
-                  className="w-full h-full flex justify-center items-center" 
+                  className="w-full h-full" 
                 />
               )}
                                           {cell === 'G2' && (

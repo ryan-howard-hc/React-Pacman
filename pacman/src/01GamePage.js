@@ -69,12 +69,14 @@ const GamePage = () => {
         // collectedCoins={collectedCoins} 
         setCollectedCoins={setCollectedCoins} 
       />
+      
       <Blinky
         boardData={boardData}
         initialBoardData={initialBoardData}
         pacmanPosition={pacmanPosition}
         keyPressCount={keyPressCount}
         setCollectedCoins={setCollectedCoins} 
+        setPacmanPosition={setPacmanPosition}
 
       />
             {/* <Pinky
