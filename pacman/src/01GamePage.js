@@ -3,6 +3,7 @@ import Pac from './00pac.js';
 import PacMan from './02PacMan.js';
 import Blinky from './03Blinky.js';
 import Pinky from './04Pinky.js';
+import Inky from './05Inky.js';
 const GamePage = () => {
   // boardData is a 2D array representing the game board
   const initialBoardData  = [
@@ -71,6 +72,15 @@ const GamePage = () => {
       />
       
       <Blinky
+        boardData={boardData}
+        initialBoardData={initialBoardData}
+        pacmanPosition={pacmanPosition}
+        keyPressCount={keyPressCount}
+        setCollectedCoins={setCollectedCoins} 
+        setPacmanPosition={setPacmanPosition}
+
+      />
+            <Inky
         boardData={boardData}
         initialBoardData={initialBoardData}
         pacmanPosition={pacmanPosition}
