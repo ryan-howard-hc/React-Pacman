@@ -343,7 +343,7 @@ const updateBlinkyPosition = (row, col) => {
     moveBlinkyVisual(row, col);
   } else if (cellValue === 'G2' || cellValue === 'G3' || cellValue === 'G4') {
     // Blinky moves through G2, G3, or G4 without altering them??????????
-    newBoardData[row][col] = 'G1';
+    newBoardData[row][col] = cellValue;
     setBoardData(newBoardData);
     setBlinkyPosition({ row, col });
     moveBlinkyVisual(row, col);
